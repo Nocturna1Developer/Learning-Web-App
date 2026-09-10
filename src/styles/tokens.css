@@ -1,0 +1,103 @@
+/* ROOTS — Design Tokens
+   Palette: earth, clay, warm sunlight, deep green, muted gold, warm cream. */
+:root {
+  /* Color */
+  --dark: #0f0e0b;
+  --dark-2: #171510;
+  --dark-3: #221f18;
+  --ink: #1b1812;
+  --ink-soft: #4a443a;
+  --ink-muted: #7a7266;
+
+  --paper: #f4ecdd;
+  --paper-2: #ebe1ce;
+  --paper-3: #dfd3bd;
+
+  --earth: #9a4a2a;
+  --earth-deep: #6b3220;
+  --clay: #c8704a;
+  --clay-soft: #e2a07f;
+
+  --leaf: #1f4d33;
+  --leaf-deep: #10291b;
+  --leaf-light: #3f7d55;
+
+  --sun: #d9a441;
+  --sun-soft: #ecc873;
+  --sun-deep: #b8832a;
+
+  /* Semantic (dark surfaces default) */
+  --bg: var(--dark);
+  --fg: var(--paper);
+  --fg-soft: rgba(244, 236, 221, 0.72);
+  --fg-muted: rgba(244, 236, 221, 0.46);
+  --line: rgba(244, 236, 221, 0.12);
+  --line-strong: rgba(244, 236, 221, 0.24);
+  --accent: var(--sun);
+  --card: rgba(244, 236, 221, 0.035);
+  --card-hover: rgba(244, 236, 221, 0.06);
+
+  /* Type */
+  --font-display: "Fraunces", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-body: "Manrope", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-telugu: "Noto Serif Telugu", "Nirmala UI", "Gautami", "Kohinoor Telugu", serif;
+  --font-indic: "Nirmala UI", "Kohinoor Devanagari", "Noto Serif", system-ui, serif;
+
+  /* Fluid type scale */
+  --text-xs: 0.72rem;
+  --text-sm: 0.86rem;
+  --text-base: clamp(1rem, 0.95rem + 0.2vw, 1.1rem);
+  --text-lg: clamp(1.12rem, 1rem + 0.5vw, 1.35rem);
+  --text-xl: clamp(1.5rem, 1.2rem + 1.2vw, 2.2rem);
+  --text-2xl: clamp(2rem, 1.4rem + 2.4vw, 3.4rem);
+  --text-3xl: clamp(2.6rem, 1.6rem + 4vw, 5.2rem);
+  --text-hero: clamp(2.7rem, 1.4rem + 5.2vw, 6.4rem);
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-24: 6rem;
+  --section-y: clamp(5rem, 6vw + 3rem, 10rem);
+  --gutter: clamp(1.25rem, 4vw, 4rem);
+  --container: 1440px;
+
+  /* Shape */
+  --radius-sm: 3px;
+  --radius: 6px;
+  --radius-lg: 12px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Light (paper) surface theme, applied per-section */
+[data-surface="paper"] {
+  --bg: var(--paper);
+  --fg: var(--ink);
+  --fg-soft: rgba(27, 24, 18, 0.74);
+  --fg-muted: rgba(27, 24, 18, 0.5);
+  --line: rgba(27, 24, 18, 0.12);
+  --line-strong: rgba(27, 24, 18, 0.26);
+  --accent: var(--earth);
+  --card: rgba(27, 24, 18, 0.035);
+  --card-hover: rgba(27, 24, 18, 0.06);
+}
+
+[data-surface="leaf"] {
+  --bg: #12261a;
+  --fg: var(--paper);
+  --fg-soft: rgba(244, 236, 221, 0.74);
+  --fg-muted: rgba(244, 236, 221, 0.48);
+  --line: rgba(244, 236, 221, 0.13);
+  --line-strong: rgba(244, 236, 221, 0.26);
+  --accent: var(--sun);
+  --card: rgba(244, 236, 221, 0.04);
+  --card-hover: rgba(244, 236, 221, 0.07);
+}

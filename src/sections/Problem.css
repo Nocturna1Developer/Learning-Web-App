@@ -1,0 +1,101 @@
+.generations {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-8);
+  padding-top: var(--space-12);
+  margin-bottom: clamp(4rem, 8vw, 7rem);
+  color: var(--ink);
+}
+
+.generations__thread {
+  position: absolute;
+  top: var(--space-12);
+  left: 8%;
+  width: 84%;
+  height: 6px;
+  color: var(--ink);
+  overflow: visible;
+}
+
+.gen { position: relative; padding-top: var(--space-8); }
+
+.gen__node {
+  position: absolute;
+  top: -3px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.gen__dot {
+  width: calc(9px + var(--strength) * 9px);
+  height: calc(9px + var(--strength) * 9px);
+  border-radius: 50%;
+  background: var(--earth);
+  opacity: calc(0.3 + var(--strength) * 0.7);
+  box-shadow: 0 0 0 6px var(--paper);
+}
+
+.gen > * { text-align: center; }
+
+.gen__who {
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--earth);
+  margin-bottom: var(--space-4);
+}
+.gen__telugu {
+  font-family: var(--font-telugu);
+  font-size: clamp(1.8rem, 3.4vw, 2.8rem);
+  line-height: 1.35;
+  color: var(--ink);
+}
+.gen__roman {
+  font-size: var(--text-sm);
+  font-style: italic;
+  color: var(--fg-muted);
+  margin-bottom: var(--space-4);
+}
+.gen__where {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  line-height: 1.25;
+  color: var(--ink);
+  margin-bottom: var(--space-2);
+}
+.gen__lang {
+  font-size: var(--text-sm);
+  color: var(--fg-muted);
+  max-width: 20em;
+  margin-inline: auto;
+  line-height: 1.5;
+}
+
+.problem__note {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(2rem, 6vw, 5rem);
+  align-items: start;
+  padding-top: clamp(2.5rem, 5vw, 4rem);
+  border-top: 1px solid var(--line);
+}
+.problem__note .display { max-width: 14em; }
+
+@media (max-width: 860px) {
+  .generations { grid-template-columns: 1fr; gap: var(--space-12); }
+  .generations__thread {
+    left: 50%;
+    top: calc(var(--space-12) + 6px);
+    width: 6px;
+    height: calc(100% - var(--space-12) - 40px);
+    transform: rotate(90deg);
+    transform-origin: top left;
+    display: none;
+  }
+  .gen { padding-top: var(--space-6); }
+  .gen__node { position: static; margin-bottom: var(--space-4); }
+  .problem__note { grid-template-columns: 1fr; gap: var(--space-6); }
+}

@@ -1,0 +1,59 @@
+.scene-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.scene-fill {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Gentle environmental motion */
+@keyframes sway {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(0.7deg); }
+}
+.sway { transform-origin: 50% 100%; animation: sway 11s ease-in-out infinite; }
+@media (prefers-reduced-motion: no-preference) { .sway, .kite-drift, .twinkle, .steam, .hero-child { backface-visibility: hidden; } }
+.sway--slow { animation-duration: 15s; animation-delay: -3s; }
+.sway--fast { animation-duration: 7s; animation-delay: -1s; }
+
+@keyframes kiteDrift {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(18px, -22px) rotate(4deg); }
+}
+.kite-drift { transform-origin: 50% 0; animation: kiteDrift 9s ease-in-out infinite; }
+.kite-drift--b { animation-duration: 12s; animation-delay: -4s; }
+.kite-drift--c { animation-duration: 15s; animation-delay: -8s; }
+
+@keyframes twinkle {
+  0%, 100% { opacity: inherit; }
+  50% { opacity: 0.15; }
+}
+.twinkle { animation: twinkle 5s ease-in-out infinite; }
+
+@keyframes steamRise {
+  0% { opacity: 0; transform: translateY(14px) scaleX(0.85); }
+  35% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-26px) scaleX(1.15); }
+}
+.steam { animation: steamRise 6s ease-in-out infinite; transform-origin: 50% 100%; }
+
+@keyframes mugguDraw {
+  from { stroke-dashoffset: 2400; }
+  to { stroke-dashoffset: 0; }
+}
+.muggu-draw {
+  stroke-dasharray: 2400;
+  animation: mugguDraw 6s var(--ease-out) forwards;
+}
+
+/* Child breathes very slightly — keeps the hero from feeling frozen */
+@keyframes childBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+.hero-child { animation: childBob 6s ease-in-out infinite; transform-origin: 50% 100%; }

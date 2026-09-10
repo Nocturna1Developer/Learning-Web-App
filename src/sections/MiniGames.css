@@ -1,0 +1,77 @@
+.mgs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+}
+
+.mg {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--card);
+  transition: border-color 0.6s var(--ease-out), transform 0.7s var(--ease-out), background 0.6s;
+}
+.mg:hover {
+  border-color: var(--line-strong);
+  background: var(--card-hover);
+  transform: translateY(-4px);
+}
+
+.mg__media { position: relative; aspect-ratio: 20 / 11; overflow: hidden; }
+.mg__art { width: 100%; height: 100%; transition: transform 1.1s var(--ease-out); }
+.mg:hover .mg__art { transform: scale(1.045); }
+.mg__media-grade {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(15,14,11,0.75) 0%, rgba(15,14,11,0) 45%);
+}
+.mg__mechanic {
+  position: absolute;
+  left: var(--space-4); bottom: var(--space-4);
+  font-size: var(--text-xs);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(244, 236, 221, 0.78);
+  background: rgba(15, 14, 11, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(244, 236, 221, 0.16);
+  border-radius: var(--radius-sm);
+  padding: 0.4em 0.85em;
+}
+
+.mg__body {
+  padding: clamp(1.5rem, 2.4vw, 2.25rem);
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+}
+.mg__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-4); }
+.mg__telugu { font-size: 1.3rem; color: var(--fg-muted); line-height: 1; }
+.mg__text { font-size: var(--text-sm); line-height: 1.65; color: var(--fg-soft); }
+.mg__teaches {
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  color: var(--fg-muted);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--line);
+}
+.mg__teaches span {
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-right: 0.7em;
+}
+
+@keyframes mgTimer {
+  0% { transform: scaleX(1); }
+  100% { transform: scaleX(0.25); }
+}
+.mg-timer rect:last-child { transform-origin: 40px 0; animation: mgTimer 5s var(--ease-in-out) infinite alternate; }
+
+@media (max-width: 700px) {
+  .mgs { grid-template-columns: 1fr; }
+}
