@@ -44,14 +44,15 @@ export function Problem() {
             <Reveal><span className="eyebrow">The problem</span></Reveal>
             <RevealLines
               className="display display--xl"
-              lines={["Some stories are", <>hard to <em>inherit</em>.</>]}
+              lines={["They know where they live.", <>But do they know where they <em>come from</em>?</>]}
             />
           </div>
           <Reveal delay={0.15}>
             <p className="lede">
-              Language is the thread that carries everything else — the jokes, the recipes,
-              the reason a festival matters. When the thread thins, it rarely snaps loudly.
-              It just goes quiet, one generation at a time.
+              A child born and raised in America can grow up surrounded by their family&rsquo;s
+              culture without ever quite getting inside it. They hear another language at home.
+              They know the food. They celebrate the festivals. But the connection gets harder to
+              hold with every generation.
             </p>
           </Reveal>
         </div>
@@ -85,15 +86,15 @@ export function Problem() {
         <Reveal delay={0.2}>
           <div className="problem__note">
             <p className="display display--md">
-              It isn&rsquo;t that children don&rsquo;t care.
+              Growing up somewhere else doesn&rsquo;t mean
               <br />
-              It&rsquo;s that nobody handed them a way in.
+              growing up disconnected.
             </p>
             <p className="body">
-              Weekend classes ask a child to study something their friends never mention.
-              Apps hand them vocabulary with nowhere to put it. Meanwhile the actual culture —
-              the food, the noise, the family — lives on the other side of a phone call, eleven
-              time zones away.
+              This isn&rsquo;t about guilt, and it isn&rsquo;t about homework. Weekend classes ask a
+              child to study something their friends never mention; apps hand them vocabulary with
+              nowhere to put it. ROOTS turns the connection into something a child actually wants
+              to explore.
             </p>
           </div>
         </Reveal>

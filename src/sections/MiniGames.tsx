@@ -150,13 +150,14 @@ export function MiniGames() {
       <div className="container">
         <div className="section-head section-head--split">
           <div>
-            <Reveal><span className="eyebrow">Mini-games</span></Reveal>
-            <RevealLines className="display display--xl" lines={["Learning hides", <>inside the <em>fun</em>.</>]} />
+            <Reveal><span className="eyebrow">Gameplay</span></Reveal>
+            <RevealLines className="display display--xl" lines={["This isn't homework.", <>It&rsquo;s a <em>world</em>.</>]} />
           </div>
           <Reveal delay={0.15}>
             <p className="lede">
-              Each one is designed to be replayed for its own sake. What it teaches is a
-              by-product of being good at it.
+              Village exploration, market quests, cooking, festival games, puzzles — each one
+              is built to be replayed for its own sake. What it teaches is a by-product of being
+              good at it.
             </p>
           </Reveal>
         </div>

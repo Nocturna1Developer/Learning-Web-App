@@ -212,6 +212,14 @@ ul { margin: 0; padding: 0; list-style: none; }
   }
 }
 
+/* ----- Inline text link ----- */
+.inline-link {
+  color: var(--accent);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  transition: border-color 0.3s;
+}
+.inline-link:hover { border-bottom-color: var(--accent); }
+
 /* ----- Masked line reveal ----- */
 .reveal-line { display: block; overflow: hidden; padding-bottom: 0.08em; margin-bottom: -0.08em; }
 .reveal-line__inner { display: block; }

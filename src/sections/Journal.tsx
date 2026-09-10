@@ -57,12 +57,13 @@ export function Journal() {
         <div className="section-head section-head--split">
           <div>
             <Reveal><span className="eyebrow">Heritage Journal</span></Reveal>
-            <RevealLines className="display display--xl" lines={["Build a collection of", <>where you <em>come from</em>.</>]} />
+            <RevealLines className="display display--xl" lines={["Keep what", <>you <em>discover</em>.</>]} />
           </div>
           <Reveal delay={0.15}>
             <p className="lede">
-              Everything a player finds is kept. The journal grows into something a child can
-              scroll back through years later — part save file, part family archive.
+              Words, phrases, recipes, stories, objects, music, memories — everything a player
+              finds is kept. The journal grows into something a child can scroll back through years
+              later: part save file, part family archive.
             </p>
           </Reveal>
         </div>

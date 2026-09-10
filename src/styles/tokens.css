@@ -41,7 +41,9 @@
   --font-display: "Fraunces", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
   --font-body: "Manrope", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-telugu: "Noto Serif Telugu", "Nirmala UI", "Gautami", "Kohinoor Telugu", serif;
-  --font-indic: "Nirmala UI", "Kohinoor Devanagari", "Noto Serif", system-ui, serif;
+  --font-devanagari: "Noto Serif Devanagari", "Nirmala UI", "Kohinoor Devanagari", serif;
+  --font-sc: "Noto Serif SC", "Songti SC", "SimSun", "PingFang SC", serif;
+  --font-arabic: "Noto Naskh Arabic", "Geeza Pro", "Traditional Arabic", serif;
 
   /* Fluid type scale */
   --text-xs: 0.72rem;

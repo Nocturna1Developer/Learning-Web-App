@@ -1,8 +1,11 @@
 import { useRef, type MouseEvent, type ReactNode } from "react";
+import { Link } from "react-router-dom";
 
 type ButtonProps = {
   children: ReactNode;
   href?: string;
+  /** in-app route — rendered as a router Link */
+  to?: string;
   variant?: "primary" | "ghost";
   onClick?: () => void;
   className?: string;
@@ -15,7 +18,7 @@ const prefersReducedMotion = () =>
 /**
  * Magnetic button — leans gently toward the cursor, snaps back on leave.
  */
-export function Button({ children, href, variant = "primary", onClick, className = "", arrow = true }: ButtonProps) {
+export function Button({ children, href, to, variant = "primary", onClick, className = "", arrow = true }: ButtonProps) {
   const ref = useRef<HTMLAnchorElement & HTMLButtonElement>(null);
 
   const onMove = (e: MouseEvent) => {
@@ -42,6 +45,13 @@ export function Button({ children, href, variant = "primary", onClick, className
     </>
   );
 
+  if (to) {
+    return (
+      <Link ref={ref} to={to} className={cls} onMouseMove={onMove} onMouseLeave={onLeave} onClick={onClick}>
+        {inner}
+      </Link>
+    );
+  }
   if (href) {
     return (
       <a ref={ref} href={href} className={cls} onMouseMove={onMove} onMouseLeave={onLeave} onClick={onClick}>

@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
 import { Button } from "../components/Button";
 import { HeroSky, HeroHills, HeroVillage, HeroTrees, HeroForeground } from "../components/scenes/Scenes";
+import { useGame } from "../state/store";
 import "./Hero.css";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -39,6 +40,8 @@ function Motes() {
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
+  const { session } = useGame();
+  const playTo = session.user ? "/app/play" : "/subscribe";
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
 
   const ySky = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
@@ -79,7 +82,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.3, ease: EASE }}
         >
-          An interactive heritage adventure — in development
+          Telugu · Chapter One available now
         </motion.p>
 
         <h1 className="hero__headline display display--hero">
@@ -104,8 +107,9 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.95, ease: EASE }}
         >
-          An adventure that helps children discover the language, stories, traditions, and
-          memories that connect their families across generations.
+          A story-driven adventure for children growing up away from their family&rsquo;s home
+          country — helping them reconnect with the language, traditions, stories, and people that
+          shaped their family.
         </motion.p>
 
         <motion.div
@@ -114,8 +118,8 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 1.1, ease: EASE }}
         >
-          <Button href="#join">Play the Journey</Button>
-          <Button href="#world" variant="ghost">Explore ROOTS</Button>
+          <Button to={playTo}>Start your journey</Button>
+          <Button href="#game" variant="ghost">Explore the game</Button>
         </motion.div>
       </motion.div>
 
@@ -130,7 +134,7 @@ export function Hero() {
           Scroll
         </span>
         <span className="hero__chapter">
-          Chapter 01 — <span className="telugu">తెలుగు</span> · Telugu
+          <span className="telugu">తెలుగు</span> · Chapter One · A Family Story
         </span>
       </motion.div>
     </section>

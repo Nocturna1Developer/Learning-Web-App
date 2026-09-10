@@ -164,3 +164,21 @@
   .nav__burger { display: block; }
   .nav__cta { display: none; }
 }
+
+/* ---- Router additions ---- */
+.nav__login {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: rgba(244, 236, 221, 0.72);
+  transition: color 0.3s;
+  padding-block: 0.4rem;
+}
+.nav__login:hover { color: var(--paper); }
+.nav__cta--solid { background: var(--sun); color: var(--dark); border-color: var(--sun); }
+.nav__cta--solid::before { background: var(--sun-soft); }
+.nav__cta--solid:hover { color: var(--dark); }
+.nav__link.is-active { color: var(--paper); }
+.nav__link.is-active span::after { transform: scaleX(1); transform-origin: left; }
+@media (max-width: 1000px) {
+  .nav__login { display: none; }
+}

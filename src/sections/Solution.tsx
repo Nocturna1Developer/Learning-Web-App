@@ -7,13 +7,13 @@ import "./Solution.css";
 const BEATS = [
   {
     n: "01",
-    title: "You wake up somewhere real",
-    body: "The journey opens at the edge of a village at first light. Nobody explains anything. You walk, and the world starts talking.",
+    title: "It starts at home",
+    body: "Chapter One opens in an ordinary American house — with a family's story quietly everywhere in it. Amma is on the phone, in Telugu, and you catch more than you expect.",
   },
   {
     n: "02",
     title: "You need something, so you ask",
-    body: "The well is dry and the woman at the pump doesn't speak English. The word for water isn't a lesson — it's the thing standing between you and the next step.",
+    body: "Find the family album. Help in the kitchen. The word for water isn't a flashcard — it's the thing standing between you and the next step.",
   },
   {
     n: "03",
@@ -37,13 +37,14 @@ export function Solution() {
             <Reveal><span className="eyebrow">The idea</span></Reveal>
             <RevealLines
               className="display display--xl"
-              lines={["So we turned heritage", <>into an <em>adventure</em>.</>]}
+              lines={["We turned heritage", <>into an <em>adventure</em>.</>]}
             />
           </div>
           <Reveal delay={0.15}>
             <p className="lede">
-              ROOTS is a story-driven world a child actually wants to be inside. The language
-              isn&rsquo;t the curriculum — it&rsquo;s the tool they need to get somewhere.
+              ROOTS isn&rsquo;t a language app. It&rsquo;s a world a child participates in — they
+              explore, talk, play, solve, discover and remember. The language is part of the
+              world, not a lesson placed on top of it.
             </p>
           </Reveal>
         </div>

@@ -29,12 +29,13 @@ export function Family() {
       <div className="container">
         <div className="section-head">
           <Reveal><span className="eyebrow">Families</span></Reveal>
-          <RevealLines className="display display--xl family__head" lines={["The best part", <>is <em>sharing it</em>.</>]} />
+          <RevealLines className="display display--xl family__head" lines={["The game doesn't end", <>when the <em>screen does</em>.</>]} />
           <Reveal delay={0.15}>
             <p className="lede">
-              ROOTS is designed to be incomplete without the people it&rsquo;s about. Parents and
-              grandparents can add their own voice, photographs and versions of a story — and what
-              they add becomes part of the game the child is playing.
+              ROOTS is a bridge between generations. When a child discovers a Telugu word, the game
+              says: <em>ask someone in your family how they say it.</em> When they find a recipe:
+              <em>ask who makes this at home.</em> Parents and grandparents can add their own voice,
+              photographs and versions of a story — and what they add becomes part of the game.
             </p>
           </Reveal>
         </div>

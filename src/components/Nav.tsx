@@ -1,18 +1,23 @@
 import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Logo } from "./Logo";
+import { useGame } from "../state/store";
 import "./Nav.css";
 
 const LINKS = [
-  { label: "Game", href: "#game" },
-  { label: "World", href: "#world" },
-  { label: "Language", href: "#language" },
-  { label: "For Families", href: "#families" },
-  { label: "About", href: "#about" },
+  { label: "Game", to: "/#game" },
+  { label: "World", to: "/#world" },
+  { label: "Languages", to: "/languages" },
+  { label: "For Families", to: "/#families" },
+  { label: "About", to: "/#about" },
 ];
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { session } = useGame();
+  const { pathname } = useLocation();
+  const onHome = pathname === "/";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 80);
@@ -32,27 +37,37 @@ export function Nav() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  // Close the panel on any navigation.
+  useEffect(() => { setOpen(false); }, [pathname]);
+
+  const solid = scrolled || !onHome;
+
   return (
     <>
       <a className="skip-link" href="#main">Skip to content</a>
-      <header className={`nav ${scrolled ? "nav--scrolled" : ""} ${open ? "nav--open" : ""}`}>
+      <header className={`nav ${solid ? "nav--scrolled" : ""} ${open ? "nav--open" : ""}`}>
         <div className="nav__inner">
-          <a href="#top" className="nav__logo" aria-label="ROOTS — home">
+          <Link to="/" className="nav__logo" aria-label="ROOTS — home">
             <Logo size={20} />
-          </a>
+          </Link>
 
           <nav className="nav__links" aria-label="Primary">
             {LINKS.map((l) => (
-              <a key={l.href} href={l.href} className="nav__link">
+              <Link key={l.to} to={l.to} className={`nav__link ${pathname === l.to ? "is-active" : ""}`}>
                 <span>{l.label}</span>
-              </a>
+              </Link>
             ))}
           </nav>
 
           <div className="nav__actions">
-            <a href="#join" className="nav__cta">
-              <span>Play Now</span>
-            </a>
+            {session.user ? (
+              <Link to="/app" className="nav__cta nav__cta--solid"><span>Enter ROOTS</span></Link>
+            ) : (
+              <>
+                <Link to="/login" className="nav__login">Log in</Link>
+                <Link to="/subscribe" className="nav__cta"><span>Subscribe</span></Link>
+              </>
+            )}
             <button
               className="nav__burger"
               aria-label={open ? "Close menu" : "Open menu"}
@@ -68,21 +83,21 @@ export function Nav() {
       <div className={`nav-panel ${open ? "nav-panel--open" : ""}`} aria-hidden={!open}>
         <nav className="nav-panel__links" aria-label="Mobile">
           {LINKS.map((l, i) => (
-            <a
-              key={l.href}
-              href={l.href}
-              onClick={() => setOpen(false)}
-              style={{ transitionDelay: open ? `${0.12 + i * 0.06}s` : "0s" }}
-            >
+            <Link key={l.to} to={l.to} style={{ transitionDelay: open ? `${0.12 + i * 0.06}s` : "0s" }}>
               <span className="nav-panel__index">0{i + 1}</span>
               {l.label}
-            </a>
+            </Link>
           ))}
         </nav>
-        <div className="nav-panel__foot">
-          <a href="#join" className="btn" onClick={() => setOpen(false)}>
-            <span className="btn__label">Play the Journey</span>
-          </a>
+        <div className="nav-panel__foot btn-row">
+          {session.user ? (
+            <Link to="/app" className="btn"><span className="btn__label">Enter ROOTS</span></Link>
+          ) : (
+            <>
+              <Link to="/subscribe" className="btn"><span className="btn__label">Subscribe</span></Link>
+              <Link to="/login" className="btn btn--ghost"><span className="btn__label">Log in</span></Link>
+            </>
+          )}
         </div>
       </div>
     </>
