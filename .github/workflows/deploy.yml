@@ -33,11 +33,13 @@ jobs:
       - name: Typecheck and build
         run: npm run build
 
-      # Requires Settings -> Pages -> Source: "GitHub Actions" (one-time).
-      # enablement: true is deliberately not set — the workflow token is not
-      # allowed to create the Pages site, and trying fails the whole run.
+      # enablement: true re-creates the Pages site if it has been unpublished.
+      # If the workflow token isn't allowed to, this step fails and Pages has to
+      # be switched on by hand (Settings -> Pages -> Source: GitHub Actions).
       - name: Configure Pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - uses: actions/upload-pages-artifact@v3
         with:
