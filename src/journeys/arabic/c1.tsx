@@ -1,7 +1,7 @@
-import type { Journey, Word } from "./types";
-import { Defs, Walls, Door, PhotoFrame, FLOOR_Y, WOOD, FRAME } from "../game/rooms";
-import { Figure, Child, House, Pot } from "../components/scenes/primitives";
-import { Icon, Panel } from "./kit";
+import type { ChapterContent } from "../types";
+import { Defs, Walls, Door, PhotoFrame, FLOOR_Y, WOOD, FRAME } from "../../game/rooms";
+import { Figure, Child, House, Pot } from "../../components/scenes/primitives";
+import { Icon, Panel } from "../kit";
 
 /* =====================================================================
    ARABIC · Levantine, as spoken at home · A Levantine family
@@ -10,22 +10,6 @@ import { Icon, Panel } from "./kit";
    others would each be their own journey, not a reskin of this one.
    ===================================================================== */
 
-const words: Word[] = [
-  { id: "mayy", native: "مي", roman: "mayy", english: "water", group: "food", where: "the jug in the kitchen" },
-  { id: "khubz", native: "خبز", roman: "khubz", english: "bread", group: "food", where: "the bag in the kitchen" },
-  { id: "zaytoon", native: "زيتون", roman: "zaytoon", english: "olives", group: "food", where: "a jar in the kitchen" },
-  { id: "sukkar", native: "سكر", roman: "sukkar", english: "sugar", group: "food", where: "the tin in the kitchen" },
-  { id: "laymoon", native: "ليمون", roman: "laymoon", english: "lemon", group: "food", where: "the balcony" },
-  { id: "ahwe", native: "قهوة", roman: "ahwe", english: "coffee", group: "food", where: "Jiddo's coffee pot" },
-  { id: "hummus", native: "حمص", roman: "hummus", english: "hummus", group: "food", where: "the table" },
-  { id: "bayt", native: "بيت", roman: "bayt", english: "home · house", group: "home", where: "the photo of Teta's old house" },
-  { id: "yasmeen", native: "ياسمين", roman: "yasmeen", english: "jasmine", group: "home", where: "the balcony" },
-  { id: "ayle", native: "عيلة", roman: "‘ayle", english: "family", group: "family", where: "the photos in the salon" },
-  { id: "mama", native: "ماما", roman: "mama", english: "mom", group: "family", where: "a photo in the salon" },
-  { id: "baba", native: "بابا", roman: "baba", english: "dad", group: "family", where: "his chair on the balcony" },
-  { id: "teta", native: "تيتا", roman: "teta", english: "grandma", group: "family", where: "the kitchen" },
-  { id: "jiddo", native: "جدو", roman: "jiddo", english: "grandpa", group: "family", where: "the salon" },
-];
 
 /* ---------------- art ---------------- */
 
@@ -346,27 +330,9 @@ const story = [
 
 /* ---------------- the journey ---------------- */
 
-export const arabic: Journey = {
-  id: "arabic",
-  language: "Arabic",
-  native: "العربية",
-  family: "A Levantine family",
-  variety: "Levantine Arabic, as spoken at home",
-  script: "ar",
-  dir: "rtl",
-  romanize: true,
-  speech: "ar",
-  chapterName: "Ahlan wa Sahlan",
-  chapterNative: "أهلا وسهلا",
-  subtitle: "Sunday lunch at Teta's",
-  synopsis:
-    "Sunday lunch at Teta and Jiddo's, in Levantine Arabic. Pick lemons on the balcony, help Teta in the kitchen, set a table no guest could leave hungry — and when the doorbell rings, welcome the family the way Teta taught you.",
-  homeLines: {
-    start: "Sunday lunch at Teta's. The guests arrive in an hour.",
-    going: "Teta's still cooking and the table's still bare.",
-    done: "The family's all inside and lunch is served. The Souk is being built.",
-  },
-  words,
+/* ---------------- the chapter ---------------- */
+
+const content: ChapterContent = {
   startRoom: "salon",
   rooms: {
     matbakh: {
@@ -418,14 +384,7 @@ export const arabic: Journey = {
       ],
     },
   },
-  speakers: {
-    teta: { name: "Teta", glyph: "ت", tone: "elder" },
-    jiddo: { name: "Jiddo", glyph: "ج", tone: "elder" },
-    khalto: { name: "Khalto", glyph: "خ", tone: "guest" },
-    guide: { name: "Your journal", glyph: "✦", tone: "guide" },
-    you: { name: "{name}", glyph: "", tone: "you" },
-  },
-  chapter: {
+  script: {
     intro: {
       kicker: "الفصل الأول · Arabic",
       title: "Ahlan wa",
@@ -578,33 +537,10 @@ export const arabic: Journey = {
       title: "Ahlan wa",
       em: "Sahlan",
       text: "You picked lemons, helped Teta, set the table, and welcomed the whole family at the door — in Arabic.",
-      next: "الفصل الثاني — The Souk — is being built.",
       quest: { v: "Eat, eat!", hint: "Or head back to ROOTS Home." },
     },
   },
-  cultureNotes: {
-    coffee: { title: "Arabic coffee", native: "قهوة", note: "Boiled with cardamom in a long-handled pot. Offering it is the first thing you do for a guest." },
-    village: { title: "Teta's village", native: "الضيعة", note: "The house Teta grew up in, and olive trees Jiddo says are hundreds of years old." },
-    zaatar: { title: "Za'atar", native: "زعتر", note: "Wild thyme, sumac and sesame. With olive oil on warm bread, it's breakfast." },
-    oil: { title: "Olive oil from home", native: "زيت زيتون", note: "A tin from the village. Teta won't cook with any other." },
-    naana: { title: "Fresh mint", native: "نعنع", note: "For the tea after lunch — and the tabbouleh, and the lemonade." },
-    hospitality: { title: "Hospitality", native: "الضيافة", note: "The guest eats first and eats most. Saying no to a second plate is only the start of the conversation." },
-    juha: { title: "Juha", native: "جحا", note: "The wise fool of Arabic folk tales, told for centuries across the Arab world — a cousin of Nasreddin Hodja in Turkish stories." },
-  },
-  memoryNotes: {
-    kitchen: { title: "Helped Teta in the kitchen", note: "Bread, olives, water, sugar — found by ear, in Arabic." },
-    table: { title: "Set the table for the guests", note: "Bread, olives, hummus and lemons. Nobody will leave hungry." },
-    story: { title: "Juha and his donkey", note: "Pleasing everyone is a goal no one reaches." },
-    welcome: { title: "“أهلا وسهلا!”", note: "You opened the door and welcomed the family in Arabic." },
-  },
-  chapters: [
-    { n: "01", name: "Ahlan wa Sahlan", native: "أهلا وسهلا", subtitle: "Sunday lunch at Teta's", body: "Help Teta, set the table, hear Jiddo's Juha story and welcome the family at the door.", available: true },
-    { n: "02", name: "The Souk", native: "السوق", subtitle: "Za'atar by the kilo", body: "A market morning: weigh out za'atar, count change, and master the art of the polite refusal.", available: false },
-    { n: "03", name: "Ma'amoul", native: "المعمول", subtitle: "Cookies for the feast", body: "Press dough into carved wooden moulds with Teta. Many Levantine families bake the same cookies for Eid and for Easter.", available: false },
-    { n: "04", name: "The Village", native: "الضيعة", subtitle: "Olive harvest", body: "Autumn in Teta's village: nets under the trees, and everyone up a ladder.", available: false },
-    { n: "05", name: "Hikayat", native: "حكايات", subtitle: "Stories after dinner", body: "More Juha, and the stories Teta tells about her own grandmother.", available: false },
-    { n: "06", name: "The Family", native: "العيلة", subtitle: "Calling the village", body: "A video call to cousins who talk faster than anyone you've ever met.", available: false },
-  ],
-  highlight: { native: "أهلا وسهلا!", roman: "ahlan wa sahlan!", english: "Welcome!", context: "What you say when you open the door to your family. They answer in Arabic — and you understand." },
   preview: <SalonArt done={new Set(["table"])} />,
 };
+
+export default content;

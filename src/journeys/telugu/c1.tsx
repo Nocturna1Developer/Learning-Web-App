@@ -1,18 +1,10 @@
-import type { Journey } from "./types";
-import { VOCAB } from "../data/vocabulary";
-import { CHAPTERS } from "../data/chapters";
-import { ROOMS, HomeScenePreview } from "../game/rooms";
-import { Portrait, Icon } from "./kit";
-import { VillageScene, MarketScene, FestivalScene, StoriesScene, FamilyScene } from "../components/scenes/Scenes";
+import type { ChapterContent } from "../types";
+import { ROOMS, HomeScenePreview } from "../../game/rooms";
+import { Portrait, Icon } from "../kit";
 
-const CHAPTER_ART: Record<string, React.ReactNode> = {
-  "family-story": <HomeScenePreview />,
-  village: <VillageScene />,
-  market: <MarketScene />,
-  festival: <FestivalScene />,
-  stories: <StoriesScene />,
-  family: <FamilyScene />,
-};
+/* TELUGU · Chapter One — A Family Story. An American home with a Telugu
+   family's story in it; the rooms themselves live in game/rooms.tsx because
+   the homepage showcases them too. */
 
 const ricePot = (
   <svg viewBox="0 0 80 90" aria-hidden="true">
@@ -22,34 +14,10 @@ const ricePot = (
   </svg>
 );
 
-export const telugu: Journey = {
-  id: "telugu",
-  language: "Telugu",
-  native: "తెలుగు",
-  family: "A Telugu family in America",
-  variety: "Telugu",
-  script: "te",
-  romanize: true,
-  speech: "te",
-  chapterName: "A Family Story",
-  chapterNative: "కుటుంబం",
-  subtitle: "Where the journey starts",
-  synopsis:
-    "An ordinary American home with a Telugu family's story quietly everywhere in it. Amma is on the phone with Ammamma, and the old family album has gone missing. Find it, put four generations back in their places, help in the kitchen — and answer Amma in Telugu without stopping to think.",
-  homeLines: {
-    start: "Your first journey starts at home. Somewhere in the house is a family album.",
-    going: "Amma is still waiting in the living room. The album hasn't found itself.",
-    done: "Chapter One is complete. Your journal is open — and the village is being built.",
-  },
-  words: VOCAB,
-  rooms: ROOMS,
+const content: ChapterContent = {
   startRoom: "bedroom",
-  speakers: {
-    amma: { name: "Amma", glyph: "అ", tone: "parent" },
-    guide: { name: "Your journal", glyph: "✦", tone: "guide" },
-    you: { name: "{name}", glyph: "", tone: "you" },
-  },
-  chapter: {
+  rooms: ROOMS,
+  script: {
     intro: {
       kicker: "Chapter One · Telugu",
       title: "A Family",
@@ -171,23 +139,10 @@ export const telugu: Journey = {
       title: "A Family",
       em: "Story",
       text: "You found the album, helped in the kitchen, and answered Amma in Telugu without thinking about it. That last part is the whole game.",
-      next: "Chapter Two — The Village — is being built.",
       quest: { v: "Say goodbye to Ammamma", hint: "Or head back to ROOTS Home." },
     },
   },
-  cultureNotes: {
-    lamp: { title: "The brass lamp", native: "దీపం", note: "Ammamma's lamp. Lit every evening, even in a house eleven time zones from where it was made." },
-    calendar: { title: "Temple calendar", native: "పంచాంగం", note: "From a temple in Guntur. Festival days circled by hand." },
-    toran: { title: "Mango-leaf toran", native: "తోరణం", note: "Strung over a doorway to welcome. The leaves are changed for festivals." },
-    tulasi: { title: "Tulasi plant", native: "తులసి", note: "Kept on the windowsill, watered every morning." },
-    album: { title: "The family album", native: "ఆల్బమ్", note: "Found in the cupboard. Four generations, one shelf." },
-  },
-  memoryNotes: {
-    album: { title: "Family album assembled", note: "Amma, Nanna, Ammamma and Tatayya — placed by name, in Telugu." },
-    kitchen: { title: "Helped Amma cook", note: "Water, salt, milk — fetched by ear, not by label." },
-    understood: { title: "“I actually understood that.”", note: "Amma asked in Telugu. You answered in Telugu." },
-  },
-  chapters: CHAPTERS.map((c) => ({ n: c.n, name: c.name, native: c.telugu, subtitle: c.subtitle, body: c.body, available: c.status === "available", art: CHAPTER_ART[c.id] })),
-  highlight: { native: "నీళ్ళు కావాలా?", roman: "neellu kaavaalaa?", english: "Do you want water?", context: "The last line of Chapter One. By then, you don't need the translation." },
   preview: <HomeScenePreview />,
 };
+
+export default content;

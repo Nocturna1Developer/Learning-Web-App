@@ -145,7 +145,7 @@
 
 
 /* ---- language tabs ---- */
-.ltabs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-2); }
+.ltabs { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(7.5rem, 1fr); gap: var(--space-2); overflow-x: auto; scroll-snap-type: x proximity; padding-bottom: 6px; scrollbar-width: thin; }
 .ltab {
   display: grid;
   gap: 2px;
@@ -163,8 +163,10 @@
 .ltab__native { font-size: 1.25rem; line-height: 1.3; color: inherit; }
 .ltab.is-active .ltab__native { color: var(--sun-soft); }
 .ltab__name { font-size: 0.64rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; }
-.ltab__bar { width: 100%; height: 3px; border-radius: 2px; background: rgba(244,236,221,0.1); margin-top: 6px; overflow: hidden; }
-.ltab__bar span { display: block; height: 100%; background: var(--sun); transition: width 0.8s var(--ease-out); }
+.ltab { scroll-snap-align: start; }
+.ltab__bar { width: 100%; display: flex; gap: 2px; margin-top: 6px; }
+.ltab__bar span { flex: 1; height: 3px; border-radius: 2px; background: rgba(244,236,221,0.12); }
+.ltab__bar span.is-on { background: var(--sun); }
 
 /* ---- your worlds ---- */
 .worlds { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-3); }
@@ -203,9 +205,14 @@
   .worlds { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 @media (max-width: 700px) {
-  .ltabs { grid-template-columns: repeat(5, minmax(5.8rem, 1fr)); overflow-x: auto; scroll-snap-type: x proximity; padding-bottom: 4px; }
-  .ltab { padding: 0.6em 0.7em; scroll-snap-align: start; min-width: 0; }
+  .ltabs { grid-auto-columns: minmax(6rem, 1fr); }
+  .ltab { padding: 0.6em 0.7em; min-width: 0; }
   .ltab__native { font-size: 1.05rem; }
   .ltab__name { font-size: 0.56rem; letter-spacing: 0.12em; }
   .worlds { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+.page__notice { color: var(--sun-soft); }
+.chapter-row.is-complete .chapter-row__status { color: var(--sun); }
+.chapter-row__art > .art-placeholder { width: 100%; height: 100%; }
+.worlds { grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr)); }

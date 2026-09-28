@@ -118,7 +118,11 @@ ul { margin: 0; padding: 0; list-style: none; }
 /* An RTL block would otherwise right-align itself inside this left-aligned layout.
    Characters still run right-to-left; only the block's edge changes. */
 .script[dir="rtl"] { text-align: left; }
-.script-es { font-family: var(--font-display); font-style: italic; }
+.script-latin { font-family: var(--font-display); font-style: italic; }
+.script-bn { font-family: var(--font-bengali); }
+.script-ru { font-family: var(--font-cyrillic); }
+/* Nastaliq hangs deep below the baseline — give it room. */
+.script-ur { font-family: var(--font-urdu); line-height: 2.1; }
 
 /* ----- Section header block ----- */
 .section-head {
@@ -234,3 +238,6 @@ ul { margin: 0; padding: 0; list-style: none; }
 /* ----- Masked line reveal ----- */
 .reveal-line { display: block; overflow: hidden; padding-bottom: 0.08em; margin-bottom: -0.08em; }
 .reveal-line__inner { display: block; }
+
+/* A chapter's scene while its module is still loading. */
+.art-placeholder { width: 100%; height: 100%; }

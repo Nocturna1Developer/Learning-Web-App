@@ -1,0 +1,117 @@
+import type { Language } from "../types";
+
+/* CHINESE · Mandarin, simplified characters · A Chinese-American family with roots in Shandong. */
+
+const meta: Language = {
+  id: "chinese",
+  lang: "zh-Hans",
+  speech: "zh",
+  language: "Chinese",
+  native: "中文",
+  family: "A Chinese-American family",
+  variety: "Mandarin · simplified characters",
+  script: "zh",
+  romanize: true,
+  line: "A Chinese-American family, from New Year's Eve to Nǎinai's hometown in Shandong. Built for regional worlds, not one flattened picture.",
+  journeys: ["Family and the table", "Festivals and the lunar year", "Regional stories and dialects", "Everyday life across generations"],
+  a: "#b8452f",
+  b: "#d9a441",
+  rank: 2,
+  speakers: {
+    nainai: { name: "Nǎinai", glyph: "奶", tone: "elder" },
+    mama: { name: "Māma", glyph: "妈", tone: "parent" },
+    guide: { name: "Your journal", glyph: "✦", tone: "guide" },
+    you: { name: "{name}", glyph: "", tone: "you" },
+  },
+  words: [
+    { id: "shui", native: "水", roman: "shuǐ", english: "water", group: "food", where: "the kettle in the kitchen", ch: 1 },
+    { id: "jiaozi", native: "饺子", roman: "jiǎozi", english: "dumplings", group: "food", where: "Nǎinai's board", ch: 1 },
+    { id: "mianfen", native: "面粉", roman: "miànfěn", english: "flour", group: "food", where: "the kitchen counter", ch: 1 },
+    { id: "baicai", native: "白菜", roman: "báicài", english: "napa cabbage", group: "food", where: "the kitchen counter", ch: 1 },
+    { id: "kuaizi", native: "筷子", roman: "kuàizi", english: "chopsticks", group: "home", where: "the sideboard", ch: 1 },
+    { id: "wan", native: "碗", roman: "wǎn", english: "bowl", group: "home", where: "the sideboard", ch: 1 },
+    { id: "fu", native: "福", roman: "fú", english: "good fortune", group: "home", where: "the front door", ch: 1 },
+    { id: "denglong", native: "灯笼", roman: "dēnglong", english: "lantern", group: "home", where: "the front hall", ch: 1 },
+    { id: "hongbao", native: "红包", roman: "hóngbāo", english: "red envelope", group: "home", where: "Nǎinai's sleeve", ch: 1 },
+    { id: "jia", native: "家", roman: "jiā", english: "home · family", group: "family", where: "the photo in the hall", ch: 1 },
+    { id: "mama", native: "妈妈", roman: "māma", english: "mom", group: "family", where: "the dinner table", ch: 1 },
+    { id: "baba", native: "爸爸", roman: "bàba", english: "dad", group: "family", where: "the dinner table", ch: 1 },
+    { id: "nainai", native: "奶奶", roman: "nǎinai", english: "grandma (dad's mother)", group: "family", where: "the dining room", ch: 1 },
+    { id: "yeye", native: "爷爷", roman: "yéye", english: "grandpa (dad's father)", group: "family", where: "the dinner table", ch: 1 },
+  ],
+  cultureNotes: {
+    fu: { title: "The upside-down 福", native: "福到了", note: "倒 (dào, upside down) sounds exactly like 到 (dào, arrive) — so an upside-down fú says good fortune has arrived." },
+    couplets: { title: "Spring couplets", native: "春联", note: "Two matching lines of poetry pasted either side of the door, with a four-character blessing across the top." },
+    bamboo: { title: "Lucky bamboo", native: "富贵竹", note: "Given in threes, fives and eights. Never four — 四 (sì) sounds like 死 (sǐ)." },
+    plum: { title: "Plum blossom", native: "梅花", note: "The flower that blooms in the cold. A picture of patience." },
+    fish: { title: "Fish for plenty", native: "年年有余", note: "鱼 (yú, fish) sounds like 余 (yú, surplus). A whole fish on the table means plenty every year." },
+    jiaozi: { title: "Dumplings", native: "饺子", note: "Folded to look like old silver ingots. Many families, especially in the north, make them together on New Year's Eve." },
+    seating: { title: "The seat of honour", native: "上座", note: "Facing the door, for the eldest — even at a round table." },
+    nian: { title: "The story of Nián", native: "年", note: "The monster scared off by red and noise. 过年 — celebrating New Year — literally means “getting past Nián”." },
+    steamer: { title: "Bamboo steamers", native: "蒸笼", note: "Stacked three high over one pot of boiling water." },
+  },
+  memoryNotes: {
+    dumplings: { title: "Made dumplings with Nǎinai", note: "Flour, water, cabbage, a bowl — fetched in Mandarin." },
+    table: { title: "Seated the family", note: "Yéye facing the door, everyone in their place." },
+    story: { title: "The story of Nián", note: "Why everything tonight is red." },
+    newyear: { title: "“新年快乐！”", note: "Nǎinai gave you a hóngbāo. You thanked her the right way." },
+  },
+  chapters: [
+    {
+      n: 1,
+      name: "Reunion Dinner",
+      native: "团圆饭",
+      subtitle: "New Year's Eve at home",
+      synopsis:
+        "Lunar New Year's Eve in a Chinese-American home. Put the 福 on the door (upside down, on purpose), wrap dumplings with Nǎinai, seat the family around the round table — and find out why everything tonight is red.",
+      homeLines: {
+        start: "It's New Year's Eve, and the 福 still isn't on the door.",
+        going: "Nǎinai is at the dining table. Reunion dinner won't make itself.",
+        done: "Reunion dinner is done and your hóngbāo is safe. Next: the morning market.",
+      },
+    },
+    {
+      n: 2,
+      name: "The Morning Market",
+      native: "早市",
+      subtitle: "Numbers before breakfast",
+      synopsis: "Summer in Nǎinai's hometown in Shandong. Walk to the morning market with her, buy scallions and buns, count out yuan, and learn which stall she trusts.",
+      homeLines: { start: "Nǎinai's at the door with her shopping bag.", going: "The morning market closes at nine. Nǎinai's list isn't done.", done: "Breakfast is bought. Next: noodles by hand." },
+    },
+    {
+      n: 3,
+      name: "Noodles by Hand",
+      native: "拉面",
+      subtitle: "Long life, one pull at a time",
+      synopsis: "It's Nǎinai's birthday, and Yéye is making longevity noodles by hand. Learn the steps, help him pull — and find out why birthday noodles are never cut.",
+      homeLines: { start: "Yéye's rolling up his sleeves. It's Nǎinai's birthday.", going: "The dough is resting. Yéye's waiting for you.", done: "One very long noodle, uncut. Next: Mid-Autumn." },
+    },
+    {
+      n: 4,
+      name: "Mid-Autumn",
+      native: "中秋",
+      subtitle: "Mooncakes and lanterns",
+      synopsis: "The full moon, a table of mooncakes, and lanterns with riddles hanging from them. Solve a riddle, share one mooncake between everyone, and look for the rabbit.",
+      homeLines: { start: "The moon's coming up. Nǎinai has the mooncakes.", going: "There are still riddles on the lanterns.", done: "The moon's full and so is everyone. Next: the story of Chang'e." },
+    },
+    {
+      n: 5,
+      name: "Stories",
+      native: "故事",
+      subtitle: "Chang'e and the moon",
+      synopsis: "On the roof under the Mid-Autumn moon, Nǎinai tells the story of Chang'e, who flew to the moon, and the jade rabbit who keeps her company.",
+      homeLines: { start: "Nǎinai's on the roof, looking at the moon.", going: "Nǎinai hasn't finished the story.", done: "Chang'e and the rabbit, kept. Next: home." },
+    },
+    {
+      n: 6,
+      name: "Home",
+      native: "家",
+      subtitle: "Calling across the ocean",
+      synopsis: "Back home, a video call to the cousins in Shandong. Their dialect sounds different; the teasing is exactly the same. Use everything you've learned.",
+      homeLines: { start: "The cousins are calling from Shandong.", going: "Everyone's still on the call.", done: "Home, both of them. You've finished the Chinese journey." },
+    }
+  ],
+  highlight: { native: "新年快乐！", roman: "xīnnián kuàilè!", english: "Happy New Year!", context: "What you say when Nǎinai hands you a red envelope — before you've even thought about it." },
+};
+
+export default meta;

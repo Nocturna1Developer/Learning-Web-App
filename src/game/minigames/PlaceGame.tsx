@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { GameSpec, Journey } from "../../journeys/types";
+import type { GameSpec, Language } from "../../journeys/types";
 import { wordIn } from "../../journeys";
 import { Native } from "../../journeys/render";
 import { sfx } from "../../lib/sfx";
@@ -8,7 +8,7 @@ type Spec = Extract<GameSpec, { type: "place" }>;
 
 type Props = {
   spec: Spec;
-  j: Journey;
+  j: Language;
   support: (wordId: string) => number;
   onDiscover: (wordId: string) => void;
   onComplete: () => void;

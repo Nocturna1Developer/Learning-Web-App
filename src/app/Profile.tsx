@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
-import { journeyList } from "../journeys";
-import { Native, renderSeg } from "../journeys/render";
-import { useGame, journeyStats } from "../state/store";
+import { languageList } from "../journeys";
+import { Native } from "../journeys/render";
+import { useGame, langStats, chapterStats } from "../state/store";
 import { sfx } from "../lib/sfx";
 import "./app.css";
 
@@ -13,6 +13,7 @@ export function Profile() {
   const { progress, overall, session, dispatch } = useGame();
   const [editing, setEditing] = useState(false);
   const [name, setName] = useState(progress.playerName);
+  const total = languageList().reduce((s, l) => s + l.chapters.length, 0);
 
   const saveName = () => {
     const n = name.trim().slice(0, 18) || progress.playerName;
@@ -23,8 +24,8 @@ export function Profile() {
   };
 
   const reset = (id: string, language: string) => {
-    if (!window.confirm(`Reset ${language}? Its journal empties and Chapter One starts over.`)) return;
-    dispatch({ type: "restart", j: id });
+    if (!window.confirm(`Reset ${language}? Its journal empties and every chapter starts over.`)) return;
+    dispatch({ type: "reset", j: id });
     sfx.door();
   };
 
@@ -51,42 +52,43 @@ export function Profile() {
             <div className="profile__stat"><span className="profile__stat-k">Level</span><span className="profile__stat-v">{overall.level}</span></div>
             <div className="profile__stat"><span className="profile__stat-k">Connection</span><span className="profile__stat-v">{overall.connection}%</span></div>
             <div className="profile__stat"><span className="profile__stat-k">Words</span><span className="profile__stat-v">{overall.words}</span></div>
-            <div className="profile__stat"><span className="profile__stat-k">Chapters done</span><span className="profile__stat-v">{overall.completes} / 5</span></div>
+            <div className="profile__stat"><span className="profile__stat-k">Chapters</span><span className="profile__stat-v">{overall.completes} / {total}</span></div>
           </div>
         </motion.section>
 
         <motion.section className="block" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2, ease: EASE }}>
-          <div className="block__head"><h2 className="block__title">Chapter One, in every language</h2></div>
-          {journeyList().map((j) => {
-            const jp = progress.journeys[j.id];
-            const s = journeyStats(j, jp);
-            const done = new Set(jp?.done ?? []);
+          <div className="block__head"><h2 className="block__title">Every language</h2></div>
+          {languageList().map((l) => {
+            const lp = progress.journeys[l.id];
+            const s = langStats(l, lp);
             return (
-              <div key={j.id} className="card profile__journey">
+              <div key={l.id} className="card profile__journey">
                 <div className="profile__journey-head">
                   <div>
-                    <p className="card__k"><Native j={j}>{j.native}</Native> · {j.language}</p>
-                    <p className="card__v">{j.chapterName}</p>
+                    <p className="card__k"><Native j={l}>{l.native}</Native> · {l.language}</p>
+                    <p className="card__v">{s.completes} of {l.chapters.length} chapters</p>
                   </div>
-                  <Link to={`/app/play/${j.id}`} className="block__more">{s.complete ? "Replay" : s.started ? "Continue" : "Begin"} →</Link>
+                  <Link to={`/app/play/${l.id}`} className="block__more">{s.started ? "Continue" : "Begin"} →</Link>
                 </div>
                 <div className="progress">
-                  <div className="progress__row"><span>{s.discovered.length} / {j.words.length} words</span><strong>{s.pct}%</strong></div>
+                  <div className="progress__row"><span>{s.discovered.length} / {l.words.length} words</span><strong>{s.pct}%</strong></div>
                   <div className="progress__blocks" aria-hidden="true">
-                    {Array.from({ length: 10 }, (_, i) => <span key={i} className={`progress__block ${i < s.pct / 10 ? "is-on" : ""}`} />)}
+                    {l.chapters.map((c) => <span key={c.n} className={`progress__block ${chapterStats(l, lp, c.n).complete ? "is-on" : ""}`} />)}
                   </div>
                 </div>
                 {s.started && (
                   <ul className="profile__steps">
-                    {j.chapter.beats.map((b) => (
-                      <li key={b.id} className={done.has(b.id) ? "is-done" : ""}>
-                        <span aria-hidden="true">{done.has(b.id) ? "✓" : "○"}</span> {renderSeg(b.quest.v, j, progress.playerName)}
-                      </li>
-                    ))}
-                    <li className={s.complete ? "is-done" : ""}><span aria-hidden="true">{s.complete ? "✓" : "○"}</span> {j.chapter.ending.quest.v}</li>
+                    {l.chapters.map((c) => {
+                      const cs = chapterStats(l, lp, c.n);
+                      return (
+                        <li key={c.n} className={cs.complete ? "is-done" : ""}>
+                          <span aria-hidden="true">{cs.complete ? "✓" : cs.started ? "◐" : "○"}</span> {c.n}. {c.name}
+                        </li>
+                      );
+                    })}
                   </ul>
                 )}
-                {s.started && <button className="profile__danger" onClick={() => reset(j.id, j.language)}>Reset {j.language}</button>}
+                {s.started && <button className="profile__danger" onClick={() => reset(l.id, l.language)}>Reset {l.language}</button>}
               </div>
             );
           })}

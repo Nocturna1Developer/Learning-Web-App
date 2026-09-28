@@ -1,6 +1,6 @@
-import { journeyList } from "../journeys";
+import { languageList } from "../journeys";
 import { Native } from "../journeys/render";
-import { useGame, journeyStats } from "../state/store";
+import { useGame, langStats } from "../state/store";
 import { sfx } from "../lib/sfx";
 
 /** Switches which language world the dashboard pages are showing. */
@@ -8,20 +8,22 @@ export function LanguageTabs() {
   const { progress, dispatch } = useGame();
   return (
     <div className="ltabs" role="tablist" aria-label="Language">
-      {journeyList().map((j) => {
-        const s = journeyStats(j, progress.journeys[j.id]);
-        const on = progress.active === j.id;
+      {languageList().map((l) => {
+        const s = langStats(l, progress.journeys[l.id]);
+        const on = progress.active === l.id;
         return (
           <button
-            key={j.id}
+            key={l.id}
             role="tab"
             aria-selected={on}
             className={`ltab ${on ? "is-active" : ""}`}
-            onClick={() => { dispatch({ type: "activate", j: j.id }); sfx.tick(); }}
+            onClick={() => { dispatch({ type: "activate", j: l.id }); sfx.tick(); }}
           >
-            <Native j={j} className="ltab__native">{j.native}</Native>
-            <span className="ltab__name">{j.language}</span>
-            <span className="ltab__bar" aria-label={`${s.pct}% of Chapter One`}><span style={{ width: `${s.pct}%` }} /></span>
+            <Native j={l} className="ltab__native">{l.native}</Native>
+            <span className="ltab__name">{l.language}</span>
+            <span className="ltab__bar" aria-label={`${s.completes} of ${l.chapters.length} chapters`}>
+              {l.chapters.map((c) => <span key={c.n} className={c.n <= s.completes ? "is-on" : ""} />)}
+            </span>
           </button>
         );
       })}

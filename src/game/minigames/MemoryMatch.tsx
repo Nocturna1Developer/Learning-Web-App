@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { GameSpec, Journey, Word } from "../../journeys/types";
+import type { GameSpec, Language, Word } from "../../journeys/types";
 import { Native } from "../../journeys/render";
 import { sfx } from "../../lib/sfx";
 
@@ -7,7 +7,7 @@ type Card = { key: string; wordId: string; face: "native" | "english"; word: Wor
 
 type Props = {
   spec: Extract<GameSpec, { type: "memory" }>;
-  j: Journey;
+  j: Language;
   words: Word[];
   /** 0..1 — how much English support a word still gets */
   support: (wordId: string) => number;

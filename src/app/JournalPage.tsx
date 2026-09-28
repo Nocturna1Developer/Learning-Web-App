@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import type { Word } from "../journeys/types";
 import { Native } from "../journeys/render";
-import { useGame, supportFor, journeyStats, freshJourney } from "../state/store";
+import { useGame, supportFor, langStats, freshLang } from "../state/store";
 import { LanguageTabs } from "./LanguageTabs";
 import "./app.css";
 
@@ -12,10 +12,10 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 type Tab = "language" | "family" | "culture" | "memories";
 
 export function JournalPage() {
-  const { progress, activeJourney: j } = useGame();
+  const { progress, active: j } = useGame();
   const [tab, setTab] = useState<Tab>("language");
-  const jp = progress.journeys[j.id] ?? freshJourney(j.id);
-  const s = journeyStats(j, jp);
+  const jp = progress.journeys[j.id] ?? freshLang();
+  const s = langStats(j, jp);
 
   const words = j.words.filter((w) => w.group !== "family");
   const family = j.words.filter((w) => w.group === "family");
@@ -38,7 +38,7 @@ export function JournalPage() {
     const support = supportFor(n);
     return n > 0 ? (
       <article key={w.id} className="jentry" style={{ animationDelay: `${i * 0.05}s` }}>
-        <span className="jentry__kind">{w.group === "family" ? "Family" : "Word"}</span>
+        <span className="jentry__kind">{w.group === "family" ? "Family" : "Word"} · Ch. {w.ch}</span>
         <Native j={j} className="jentry__native">{w.native}</Native>
         {j.romanize && <p className="jentry__title">{w.roman}</p>}
         <p className="jentry__sub" style={{ opacity: 0.35 + support * 0.65 }}>{w.english}</p>

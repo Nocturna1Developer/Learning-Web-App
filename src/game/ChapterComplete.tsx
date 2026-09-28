@@ -13,11 +13,13 @@ type Props = {
   family: number;
   culture: number;
   memories: number;
+  onNext?: () => void;
+  nextLabel?: string;
   onJournal: () => void;
   onHome: () => void;
 };
 
-export function ChapterComplete({ kicker, title, em, text, next, words, family, culture, memories, onJournal, onHome }: Props) {
+export function ChapterComplete({ kicker, title, em, text, next, words, family, culture, memories, onNext, nextLabel, onJournal, onHome }: Props) {
   return (
     <div className="complete" role="dialog" aria-labelledby="cc-title">
       <div className="complete__inner">
@@ -45,12 +47,13 @@ export function ChapterComplete({ kicker, title, em, text, next, words, family, 
         </div>
 
         <motion.span className="complete__unlock" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 1.5, duration: 0.6, ease: EASE }}>
-          ✦ Heritage Journal unlocked
+          ✦ Kept in your Heritage Journal
         </motion.span>
 
         <motion.div className="btn-row" style={{ justifyContent: "center" }} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.8, duration: 0.7, ease: EASE }}>
-          <Button onClick={onJournal}>Open the journal</Button>
-          <Button variant="ghost" onClick={onHome} arrow={false}>Back to ROOTS Home</Button>
+          {onNext ? <Button onClick={onNext}>{nextLabel ?? "Next chapter"}</Button> : <Button onClick={onJournal}>Open the journal</Button>}
+          {onNext && <Button variant="ghost" onClick={onJournal} arrow={false}>Journal</Button>}
+          <Button variant="ghost" onClick={onHome} arrow={false}>ROOTS Home</Button>
         </motion.div>
         <motion.p className="cinematic__text complete__next" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.2 }}>
           {next}

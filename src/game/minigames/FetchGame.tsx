@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { GameSpec, Journey } from "../../journeys/types";
+import type { GameSpec, Language } from "../../journeys/types";
 import { Native } from "../../journeys/render";
 import { sfx } from "../../lib/sfx";
 import { speak } from "../../lib/speech";
@@ -8,7 +8,8 @@ type Spec = Extract<GameSpec, { type: "fetch" }>;
 
 type Props = {
   spec: Spec;
-  j: Journey;
+  j: Language;
+  speakers: Language["speakers"];
   support: (wordId: string) => number;
   onEncounter: (wordId: string) => void;
   onComplete: () => void;
@@ -18,14 +19,14 @@ type Props = {
  * Fetch — someone with full hands asks for things, in the language. Nothing
  * is labelled with its meaning; the player has to know the word by ear.
  */
-export function FetchGame({ spec, j, support, onEncounter, onComplete }: Props) {
+export function FetchGame({ spec, j, speakers, support, onEncounter, onComplete }: Props) {
   const [step, setStep] = useState(0);
   const [state, setState] = useState<"idle" | "right" | "wrong">("idle");
   const [tried, setTried] = useState<string | null>(null);
   const done = step >= spec.asks.length;
   const ask = spec.asks[Math.min(step, spec.asks.length - 1)];
   const s = support(ask.wordId);
-  const npc = j.speakers[spec.npc];
+  const npc = speakers[spec.npc];
 
   useEffect(() => { if (!done) speak(ask.native, j.speech); }, [ask.native, done, j.speech]);
 

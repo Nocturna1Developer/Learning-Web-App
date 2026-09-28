@@ -3,16 +3,18 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { Logo } from "../components/Logo";
 import { Child } from "../components/scenes/primitives";
 import { STAGE_W } from "./rooms";
-import { getJourney, wordIn } from "../journeys";
-import { roomArt, type Beat, type Choice, type GameSpec, type Hotspot, type Journey, type Line } from "../journeys/types";
-import { Native, renderSeg } from "../journeys/render";
-import { useGame, supportFor, journeyStats, freshJourney } from "../state/store";
+import { getLanguage, isPlayable, wordIn } from "../journeys";
+import { roomArt, type Beat, type ChapterContent, type ChapterMeta, type Choice, type GameSpec, type Hotspot, type Language, type Line } from "../journeys/types";
+import { Native, renderSeg, useChapter } from "../journeys/render";
+import { useGame, supportFor, chapterStats, langStats, isUnlocked, freshLang } from "../state/store";
 import { sfx } from "../lib/sfx";
 import { speak } from "../lib/speech";
 import { PlaceGame } from "./minigames/PlaceGame";
 import { MemoryMatch } from "./minigames/MemoryMatch";
 import { FetchGame } from "./minigames/FetchGame";
 import { StoryTime } from "./minigames/StoryTime";
+import { CountGame } from "./minigames/CountGame";
+import { SequenceGame } from "./minigames/SequenceGame";
 import { ChapterComplete } from "./ChapterComplete";
 import "./game.css";
 
@@ -28,33 +30,62 @@ type Mini = { spec: GameSpec; beat: Beat } | null;
 const SPEED = 560;   // world units per second
 const REACH = 130;   // how close counts as "near" a hotspot
 
-/** Route: /app/play/:lang */
+/** Route: /app/play/:lang/:n — n defaults to the chapter the player is on. */
 export function JourneyPlayer() {
-  const { lang } = useParams();
-  const j = getJourney(lang);
-  if (!j) return <Navigate to="/app/play" replace />;
-  return <Player key={j.id} j={j} />;
+  const { lang, n: nParam } = useParams();
+  const { progress } = useGame();
+  const l = getLanguage(lang);
+  const lp = l ? progress.journeys[l.id] : undefined;
+  const n = Number(nParam);
+  const content = useChapter(l?.id ?? "", l && n ? n : 0);
+
+  if (!l) return <Navigate to="/app/play" replace />;
+  if (!nParam) return <Navigate to={`/app/play/${l.id}/${langStats(l, lp).current}`} replace />;
+  if (!isUnlocked(l, lp, n)) return <Navigate to="/app/play" replace state={{ locked: `${l.id}-${n}` }} />;
+  if (!content) return <Loading l={l} meta={l.chapters[n - 1]} />;
+  return <Player key={`${l.id}-${n}`} l={l} n={n} c={content} />;
+}
+
+function Loading({ l, meta }: { l: Language; meta: ChapterMeta }) {
+  return (
+    <div className="game game--loading" aria-busy="true">
+      <div className="cinematic">
+        <div className="cinematic__inner">
+          <p className="cinematic__k">Chapter {meta.n} · {l.language}</p>
+          <h1 className="cinematic__title">{meta.name}</h1>
+          <p className="cinematic__family">Loading the world…</p>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 /* ------------------------------------------------------------------ */
 /* Player                                                              */
 /* ------------------------------------------------------------------ */
 
-function Player({ j }: { j: Journey }) {
+function Player({ l, n, c }: { l: Language; n: number; c: ChapterContent }) {
   const { progress, dispatch } = useGame();
   const navigate = useNavigate();
-  const ch = j.chapter;
+  const ch = c.script;
+  const j = l;
+  const speakers = useMemo(() => ({ ...l.speakers, ...c.speakers }), [l.speakers, c.speakers]);
   const name = progress.playerName;
-  const jp = progress.journeys[j.id] ?? freshJourney(j.id);
-  const done = useMemo(() => new Set(jp.done), [jp.done]);
-  const stats = journeyStats(j, jp);
+  const lp = progress.journeys[l.id] ?? freshLang();
+  const cp = lp.chapters[n];
+  const done = useMemo(() => new Set(cp?.done ?? []), [cp?.done]);
+  const stats = chapterStats(l, lp, n);
   const beat = ch.beats.find((b) => !done.has(b.id));
   const complete = done.has("complete");
+  const next = l.chapters.find((x) => x.n === n + 1);
 
-  useEffect(() => { dispatch({ type: "activate", j: j.id }); }, [dispatch, j.id]);
+  useEffect(() => {
+    dispatch({ type: "activate", j: l.id });
+    dispatch({ type: "total", j: l.id, n, total: ch.beats.length, start: c.startRoom });
+  }, [dispatch, l.id, n, ch.beats.length, c.startRoom]);
 
-  const [room, setRoom] = useState(() => (j.rooms[jp.scene] ? jp.scene : j.startRoom));
-  const roomDef = j.rooms[room];
+  const [room, setRoom] = useState(() => (cp?.scene && c.rooms[cp.scene] ? cp.scene : c.startRoom));
+  const roomDef = c.rooms[room];
   const hotspots = useMemo(
     () => roomDef.hotspots.filter((h) => (!h.after || done.has(h.after)) && (!h.before || !done.has(h.before))),
     [roomDef, done],
@@ -85,7 +116,12 @@ function Player({ j }: { j: Journey }) {
   const pending = useRef<(() => void) | null>(null);
 
   const busy = lines.length > 0 || !!mini || phase !== "play";
-  const support = useCallback((id: string) => supportFor(jp.encounters[id] ?? 0), [jp.encounters]);
+  const support = useCallback((id: string) => supportFor(lp.encounters[id] ?? 0), [lp.encounters]);
+
+  // Dev-only: expose where the story is, so an automated playthrough can find its way.
+  if (import.meta.env.DEV) {
+    (window as unknown as { __roots: unknown }).__roots = { lang: l.id, n, room, beat: beat?.id, at: beat?.at, ending: ch.ending.at, auto: ch.ending.auto, rooms: Object.fromEntries(Object.values(c.rooms).map((r) => [r.id, r.hotspots.filter((h) => h.kind === "exit").map((h) => [h.label, h.to])])), labels: Object.fromEntries(Object.values(c.rooms).map((r) => [r.id, Object.fromEntries(r.hotspots.map((h) => [h.id, h.label]))])) };
+  }
 
   /* ---------------- helpers ---------------- */
 
@@ -103,47 +139,47 @@ function Player({ j }: { j: Journey }) {
   }, []);
 
   const encounter = useCallback((wordId: string) => {
-    const n = (jp.encounters[wordId] ?? 0) + 1;
-    dispatch({ type: "encounter", j: j.id, wordId });
+    const k = (lp.encounters[wordId] ?? 0) + 1;
+    dispatch({ type: "encounter", j: l.id, wordId });
     popupTimers.current.forEach(clearTimeout);
-    setPopup({ wordId, isNew: n === 1, n });
-    speak(wordIn(j, wordId).native, j.speech);
-    if (n === 1) sfx.discover(); else sfx.interact();
+    setPopup({ wordId, isNew: k === 1, n: k });
+    speak(wordIn(l, wordId).native, l.speech);
+    if (k === 1) sfx.discover(); else sfx.interact();
     popupTimers.current = [
       window.setTimeout(() => setPopup((p) => (p ? { ...p, out: true } : p)), 2600),
       window.setTimeout(() => setPopup(null), 3000),
     ];
-  }, [dispatch, j, jp.encounters]);
+  }, [dispatch, l, lp.encounters]);
 
   const goTo = useCallback((to: string) => {
     sfx.door();
     setTransition("is-leaving");
     setTimeout(() => {
-      const back = j.rooms[to].hotspots.find((h) => h.kind === "exit" && h.to === room);
+      const back = c.rooms[to].hotspots.find((h) => h.kind === "exit" && h.to === room);
       const fromRight = !!back && back.x > STAGE_W / 2;
       setRoom(to);
-      dispatch({ type: "scene", j: j.id, scene: to });
-      setPx(fromRight ? j.rooms[to].spawn.right : j.rooms[to].spawn.left);
+      dispatch({ type: "scene", j: l.id, n, scene: to });
+      setPx(fromRight ? c.rooms[to].spawn.right : c.rooms[to].spawn.left);
       setDir(fromRight ? -1 : 1);
       setTransition("is-entering");
       setTimeout(() => setTransition(""), 650);
     }, 450);
-  }, [dispatch, j, room]);
+  }, [c.rooms, dispatch, l.id, n, room]);
 
   /* ---------------- story flow ---------------- */
 
   const finish = useCallback(() => {
-    dispatch({ type: "done", j: j.id, beat: "complete" });
-    dispatch({ type: "memory", j: j.id, item: ch.ending.memory });
+    dispatch({ type: "done", j: l.id, n, beat: "complete" });
+    dispatch({ type: "memory", j: l.id, item: ch.ending.memory });
     sfx.fanfare();
     setPhase("complete");
-  }, [ch.ending.memory, dispatch, j.id]);
+  }, [ch.ending.memory, dispatch, l.id, n]);
 
-  const choiceLabel = useCallback((c: Choice) => (
+  const choiceLabel = useCallback((x: Choice) => (
     <>
-      {c.native && <Native j={j}>{c.native}</Native>}
-      {j.romanize && c.roman && c.roman !== c.native && <span className="choice__roman">{c.roman}</span>}
-      {!c.native && <span>{c.english}</span>}
+      {x.native && <Native j={j}>{x.native}</Native>}
+      {j.romanize && x.roman && x.roman !== x.native && <span className="choice__roman">{x.roman}</span>}
+      {!x.native && <span>{x.english}</span>}
     </>
   ), [j]);
 
@@ -155,23 +191,23 @@ function Player({ j }: { j: Journey }) {
       text: `{{${q.native}}}`,
       gloss: j.romanize ? q.roman : undefined,
       hint: q.english,
-      choices: q.choices.map((c) => ({
-        label: choiceLabel(c),
+      choices: q.choices.map((x) => ({
+        label: choiceLabel(x),
         onPick: () => {
-          if (c.right) {
+          if (x.right) {
             sfx.match(4);
-            e.encounter?.forEach((id) => dispatch({ type: "encounter", j: j.id, wordId: id }));
+            e.encounter?.forEach((id) => dispatch({ type: "encounter", j: l.id, wordId: id }));
             sayThen(e.right, finish);
           } else {
             sfx.miss();
-            sayThen(c.reply ?? [{ who: e.asker, text: "Listen again." }], () => sayThen([ask], null));
+            sayThen(x.reply ?? [{ who: e.asker, text: "Listen again." }], () => sayThen([ask], null));
           }
         },
       })),
     };
-    speak(q.native, j.speech);
+    speak(q.native, l.speech);
     sayThen([ask], null);
-  }, [ch.ending, choiceLabel, dispatch, finish, j, sayThen]);
+  }, [ch.ending, choiceLabel, dispatch, finish, j, l.id, l.speech, sayThen]);
 
   const runEnding = useCallback(() => {
     if (ch.ending.lines.length) sayThen(ch.ending.lines, askQuestion);
@@ -179,36 +215,36 @@ function Player({ j }: { j: Journey }) {
   }, [askQuestion, ch.ending.lines, sayThen]);
 
   const completeBeat = useCallback((b: Beat) => {
-    dispatch({ type: "done", j: j.id, beat: b.id });
-    b.culture?.forEach((item) => dispatch({ type: "culture", j: j.id, item }));
-    if (b.memory) dispatch({ type: "memory", j: j.id, item: b.memory });
+    dispatch({ type: "done", j: l.id, n, beat: b.id });
+    b.culture?.forEach((item) => dispatch({ type: "culture", j: l.id, item }));
+    if (b.memory) dispatch({ type: "memory", j: l.id, item: b.memory });
     const isLast = ch.beats[ch.beats.length - 1].id === b.id;
     const then = isLast && ch.ending.auto ? runEnding : null;
     if (b.after?.length) sayThen(b.after, then);
     else if (then) then();
-  }, [ch.beats, ch.ending.auto, dispatch, j.id, runEnding, sayThen]);
+  }, [ch.beats, ch.ending.auto, dispatch, l.id, n, runEnding, sayThen]);
 
   const runBeat = useCallback((b: Beat) => {
     if (b.encounter?.length) {
       encounter(b.encounter[0]);
-      b.encounter.slice(1).forEach((id) => dispatch({ type: "encounter", j: j.id, wordId: id }));
+      b.encounter.slice(1).forEach((id) => dispatch({ type: "encounter", j: l.id, wordId: id }));
     }
-    const next = () => (b.game ? setMini({ spec: b.game, beat: b }) : completeBeat(b));
-    if (b.lines?.length) sayThen(b.lines, next);
-    else next();
-  }, [completeBeat, dispatch, encounter, j.id, sayThen]);
+    const go = () => (b.game ? setMini({ spec: b.game, beat: b }) : completeBeat(b));
+    if (b.lines?.length) sayThen(b.lines, go);
+    else go();
+  }, [completeBeat, dispatch, encounter, l.id, sayThen]);
 
   const onGameDone = useCallback((best?: number) => {
     if (!mini) return;
     const b = mini.beat;
     setMini(null);
-    if (best) dispatch({ type: "combo", j: j.id, combo: best });
+    if (best) dispatch({ type: "combo", j: l.id, combo: best });
     completeBeat(b);
-  }, [completeBeat, dispatch, j.id, mini]);
+  }, [completeBeat, dispatch, l.id, mini]);
 
   const beginIntro = () => {
     setPhase("play");
-    dispatch({ type: "done", j: j.id, beat: "intro" });
+    dispatch({ type: "done", j: l.id, n, beat: "intro" });
     sayThen(ch.introLines, null);
   };
 
@@ -226,7 +262,7 @@ function Player({ j }: { j: Journey }) {
     if (busy) return;
     const key = `${room}:${h.id}`;
     setTouched((d) => new Set([...d, key]));
-    if (h.culture) dispatch({ type: "culture", j: j.id, item: h.culture });
+    if (h.culture) dispatch({ type: "culture", j: l.id, item: h.culture });
 
     switch (h.kind) {
       case "word":
@@ -385,16 +421,19 @@ function Player({ j }: { j: Journey }) {
     : { k: "Quest", ...ch.ending.quest };
 
   const line = lines[0];
-  const speaker = line ? j.speakers[line.who] ?? { name: line.who, glyph: "", tone: "guide" as const } : null;
-  const popWord = popup ? wordIn(j, popup.wordId) : null;
+  const speaker = line ? speakers[line.who] ?? { name: line.who, glyph: "", tone: "guide" as const } : null;
+  const popWord = popup ? wordIn(l, popup.wordId) : null;
   const popSupport = popup ? supportFor(popup.n) : 1;
 
-  const memoryWords = useMemo(
-    () => j.words.filter((w) => jp.encounters[w.id]).concat(j.words).filter((w, i, a) => a.indexOf(w) === i),
+  // Memory games draw on this chapter's words first, then what you already know.
+  const memoryWords = useMemo(() => {
+    const pool = [...l.words.filter((w) => w.ch === n), ...l.words.filter((w) => w.ch < n)];
+    return pool.filter((w) => lp.encounters[w.id]).concat(pool).filter((w, i, a) => a.indexOf(w) === i);
     // Only reshuffle when the game opens, not on every encounter mid-game.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [mini?.beat.id],
-  );
+  }, [mini?.beat.id]);
+
+  const nextPlayable = !!next && isPlayable(l.id, next.n);
 
   /* ---------------- render ---------------- */
 
@@ -406,7 +445,7 @@ function Player({ j }: { j: Journey }) {
 
           <div className="game__layer game__layer--hot">
             {hotspots.map((h) => {
-              const isDone = touched.has(`${room}:${h.id}`) || (h.kind === "word" && !!jp.encounters[h.wordId!]);
+              const isDone = touched.has(`${room}:${h.id}`) || (h.kind === "word" && !!lp.encounters[h.wordId!]);
               return (
                 <button
                   key={h.id}
@@ -455,7 +494,7 @@ function Player({ j }: { j: Journey }) {
           <div className="hud__top">
             <div className="hud__left">
               <span className="hud__chip"><Native j={j}>{roomDef.native}</Native> {roomDef.name}</span>
-              <span className="hud__chip">{stats.discovered.length} / {j.words.length} words</span>
+              <span className="hud__chip">Ch. {n} · {stats.discovered.length} / {stats.words.length} words</span>
             </div>
             <div className="hud__right">
               <button className="hud__chip" onClick={(e) => { e.stopPropagation(); navigate("/app/journal"); }}>Journal</button>
@@ -492,8 +531,8 @@ function Player({ j }: { j: Journey }) {
               )}
               {line.choices ? (
                 <div className="dialogue__choices">
-                  {line.choices.map((c, i) => (
-                    <button key={i} className="dialogue__choice" onClick={(e) => { e.stopPropagation(); c.onPick(); }}>{c.label}</button>
+                  {line.choices.map((x, i) => (
+                    <button key={i} className="dialogue__choice" onClick={(e) => { e.stopPropagation(); x.onPick(); }}>{x.label}</button>
                   ))}
                 </div>
               ) : (
@@ -508,7 +547,7 @@ function Player({ j }: { j: Journey }) {
             <div className="cinematic__inner">
               <p className="cinematic__k">{ch.intro.kicker}</p>
               <h1 className="cinematic__title">{ch.intro.title} <em>{ch.intro.em}</em></h1>
-              <p className="cinematic__family">{j.family} · {j.variety}</p>
+              <p className="cinematic__family">{l.family} · {l.variety}</p>
               <p className="cinematic__text">{ch.intro.text}</p>
               <span className="dialogue__next">Press E or click to begin →</span>
             </div>
@@ -516,27 +555,35 @@ function Player({ j }: { j: Journey }) {
         )}
 
         {mini?.spec.type === "place" && (
-          <PlaceGame spec={mini.spec} j={j} support={support} onDiscover={(id) => dispatch({ type: "encounter", j: j.id, wordId: id })} onComplete={() => onGameDone()} />
+          <PlaceGame spec={mini.spec} j={j} support={support} onDiscover={(id) => dispatch({ type: "encounter", j: l.id, wordId: id })} onComplete={() => onGameDone()} />
         )}
         {mini?.spec.type === "memory" && (
           <MemoryMatch spec={mini.spec} j={j} words={memoryWords} support={support} onComplete={(best) => onGameDone(best)} />
         )}
         {mini?.spec.type === "fetch" && (
-          <FetchGame spec={mini.spec} j={j} support={support} onEncounter={(id) => dispatch({ type: "encounter", j: j.id, wordId: id })} onComplete={() => onGameDone()} />
+          <FetchGame spec={mini.spec} j={j} speakers={speakers} support={support} onEncounter={(id) => dispatch({ type: "encounter", j: l.id, wordId: id })} onComplete={() => onGameDone()} />
         )}
-        {mini?.spec.type === "story" && <StoryTime spec={mini.spec} j={j} name={name} onComplete={() => onGameDone()} />}
+        {mini?.spec.type === "count" && (
+          <CountGame spec={mini.spec} j={j} speakers={speakers} support={support} onEncounter={(id) => dispatch({ type: "encounter", j: l.id, wordId: id })} onComplete={() => onGameDone()} />
+        )}
+        {mini?.spec.type === "sequence" && (
+          <SequenceGame spec={mini.spec} j={j} support={support} onEncounter={(id) => dispatch({ type: "encounter", j: l.id, wordId: id })} onComplete={() => onGameDone()} />
+        )}
+        {mini?.spec.type === "story" && <StoryTime spec={mini.spec} j={j} speakers={speakers} name={name} onComplete={() => onGameDone()} />}
 
         {phase === "complete" && (
           <ChapterComplete
-            kicker={`Chapter complete · ${j.language}`}
+            kicker={`Chapter ${n} complete · ${l.language}`}
             title={ch.complete.title}
             em={ch.complete.em}
             text={ch.complete.text}
-            next={ch.complete.next}
+            next={next ? (nextPlayable ? `Chapter ${next.n} — ${next.name} — is unlocked.` : `Chapter ${next.n} — ${next.name} — is being built.`) : `That's every chapter. You've finished the ${l.language} journey.`}
             words={stats.discovered.length}
-            family={stats.family.length}
-            culture={jp.culture.length}
-            memories={jp.memories.length}
+            family={lp.encounters ? l.words.filter((w) => w.ch === n && w.group === "family" && lp.encounters[w.id]).length : 0}
+            culture={lp.culture.length}
+            memories={lp.memories.length}
+            onNext={nextPlayable ? () => navigate(`/app/play/${l.id}/${n + 1}`) : undefined}
+            nextLabel={next ? `Play Chapter ${next.n}` : undefined}
             onJournal={() => navigate("/app/journal")}
             onHome={() => navigate("/app")}
           />

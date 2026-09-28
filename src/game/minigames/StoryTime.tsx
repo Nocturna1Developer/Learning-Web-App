@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import type { Choice, GameSpec, Journey, Line } from "../../journeys/types";
+import type { Choice, GameSpec, Language, Line } from "../../journeys/types";
 import { Native, renderSeg, plainSeg } from "../../journeys/render";
 import { sfx } from "../../lib/sfx";
 import { speak } from "../../lib/speech";
 
 type Spec = Extract<GameSpec, { type: "story" }>;
 
-type Props = { spec: Spec; j: Journey; name: string; onComplete: () => void };
+type Props = { spec: Spec; j: Language; speakers: Language["speakers"]; name: string; onComplete: () => void };
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -17,14 +17,14 @@ const EASE = [0.16, 1, 0.3, 1] as const;
  * stories are often actually told at home. It ends with a question asked in
  * the language.
  */
-export function StoryTime({ spec, j, name, onComplete }: Props) {
+export function StoryTime({ spec, j, speakers, name, onComplete }: Props) {
   const [i, setI] = useState(0);
   const [reply, setReply] = useState<Line[] | null>(null);
   const [solved, setSolved] = useState(false);
   const [hint, setHint] = useState(false);
   const total = spec.panels.length;
   const asking = i >= total;
-  const teller = j.speakers[spec.teller];
+  const teller = speakers[spec.teller];
   const finish = useRef(onComplete);
   finish.current = onComplete;
 
@@ -109,7 +109,7 @@ export function StoryTime({ spec, j, name, onComplete }: Props) {
                 {solved && <p className="story__solved">✦ Story kept in your journal.</p>}
                 {reply?.map((l, k) => (
                   <p key={k}>
-                    <strong>{j.speakers[l.who]?.name ?? l.who}:</strong> {renderSeg(l.text, j, name)}
+                    <strong>{speakers[l.who]?.name ?? l.who}:</strong> {renderSeg(l.text, j, name)}
                     {l.gloss && <em> — {renderSeg(l.gloss, j, name)}</em>}
                   </p>
                 ))}

@@ -1,28 +1,13 @@
-import type { Journey, Word } from "./types";
-import { Defs, Walls, Door, Window, PhotoFrame, FLOOR_Y, WOOD } from "../game/rooms";
-import { Figure, Garland, Pot } from "../components/scenes/primitives";
-import { Icon, Panel } from "./kit";
+import type { ChapterContent } from "../types";
+import { Defs, Walls, Door, Window, PhotoFrame, FLOOR_Y, WOOD } from "../../game/rooms";
+import { Figure, Garland, Pot } from "../../components/scenes/primitives";
+import { Icon, Panel } from "../kit";
 
 /* =====================================================================
    HINDI · Devanagari · A Hindi-speaking family from Lucknow
    Chapter One — दादी आईं, Dadi's Here. The first day of summer.
    ===================================================================== */
 
-const words: Word[] = [
-  { id: "paani", native: "पानी", roman: "paani", english: "water", group: "food", where: "the kitchen tap" },
-  { id: "doodh", native: "दूध", roman: "doodh", english: "milk", group: "food", where: "the fridge" },
-  { id: "cheeni", native: "चीनी", roman: "cheeni", english: "sugar", group: "food", where: "Maa's jar" },
-  { id: "chai", native: "चाय", roman: "chai", english: "tea", group: "food", where: "the kitchen" },
-  { id: "adrak", native: "अदरक", roman: "adrak", english: "ginger", group: "food", where: "the kitchen" },
-  { id: "ghar", native: "घर", roman: "ghar", english: "home · house", group: "home", where: "the living-room window" },
-  { id: "chashma", native: "चश्मा", roman: "chashma", english: "glasses", group: "home", where: "Dadi's room" },
-  { id: "kahaani", native: "कहानी", roman: "kahaani", english: "story", group: "home", where: "Dadi's storybook" },
-  { id: "maa", native: "माँ", roman: "maa", english: "mom", group: "family", where: "the kitchen" },
-  { id: "papa", native: "पापा", roman: "papa", english: "dad", group: "family", where: "his cricket match" },
-  { id: "dadi", native: "दादी", roman: "daadi", english: "grandma (dad's mother)", group: "family", where: "the living room" },
-  { id: "dada", native: "दादा", roman: "daada", english: "grandpa (dad's father)", group: "family", where: "the photo over the sofa" },
-  { id: "parivaar", native: "परिवार", roman: "parivaar", english: "family", group: "family", where: "the photos in Dadi's room" },
-];
 
 /* ---------------- art ---------------- */
 
@@ -283,26 +268,9 @@ const story = [
 
 /* ---------------- the journey ---------------- */
 
-export const hindi: Journey = {
-  id: "hindi",
-  language: "Hindi",
-  native: "हिन्दी",
-  family: "A Hindi-speaking family from Lucknow",
-  variety: "Hindi · Devanagari script",
-  script: "hi",
-  romanize: true,
-  speech: "hi",
-  chapterName: "Dadi's Here",
-  chapterNative: "दादी आईं",
-  subtitle: "The first day of summer",
-  synopsis:
-    "Dadi has flown in from Lucknow for the whole summer. Greet her the way she was greeted as a girl, make her chai the way she likes it, find the glasses she's lost again — and settle in for her story about a monkey, a crocodile and a very sweet heart.",
-  homeLines: {
-    start: "Dadi's just arrived from Lucknow. She's waiting in the living room.",
-    going: "Dadi's still waiting — for chai, for her glasses, for a story.",
-    done: "Dadi's story is told, and she's promised another tomorrow. The Bazaar is being built.",
-  },
-  words,
+/* ---------------- the chapter ---------------- */
+
+const content: ChapterContent = {
   startRoom: "baithak",
   rooms: {
     kamra: {
@@ -354,13 +322,7 @@ export const hindi: Journey = {
       ],
     },
   },
-  speakers: {
-    dadi: { name: "Dadi", glyph: "दा", tone: "elder" },
-    maa: { name: "Maa", glyph: "माँ", tone: "parent" },
-    guide: { name: "Your journal", glyph: "✦", tone: "guide" },
-    you: { name: "{name}", glyph: "", tone: "you" },
-  },
-  chapter: {
+  script: {
     intro: {
       kicker: "पहला अध्याय · Hindi",
       title: "Dadi's",
@@ -513,34 +475,10 @@ export const hindi: Journey = {
       title: "Dadi's",
       em: "Here",
       text: "You greeted Dadi, made her chai, found her glasses, and told her what you thought of her story — in Hindi.",
-      next: "दूसरा अध्याय — The Bazaar — is being built.",
       quest: { v: "Stay with Dadi a while", hint: "Or head back to ROOTS Home." },
     },
   },
-  cultureNotes: {
-    pranam: { title: "Touching an elder's feet", native: "पैर छूना", note: "A greeting of respect in many North Indian families. The elder answers with a blessing — जीते रहो, live long." },
-    mithai: { title: "Mithai from Lucknow", native: "मिठाई", note: "Sweets carried across an ocean in a suitcase. Every visiting grandparent's first priority." },
-    chai: { title: "Masala chai", native: "चाय", note: "Boiled, not steeped: water, ginger, tea, milk, sugar. Every family does it slightly differently, and every family is right." },
-    dabba: { title: "Masala dabba", native: "मसालेदानी", note: "A round steel tin with seven small cups of spice inside." },
-    blockprint: { title: "Block-print bedspread", note: "Printed by hand with carved wooden blocks in Jaipur." },
-    diya: { title: "The diya", native: "दिया", note: "A small brass lamp Dadi lights every evening, wherever she is." },
-    panchatantra: { title: "The Panchatantra", native: "पंचतंत्र", note: "A collection of animal fables around two thousand years old. The monkey and the crocodile is one of the best known." },
-  },
-  memoryNotes: {
-    chai: { title: "Made chai for Dadi", note: "Water, ginger, milk, sugar — added in Hindi, in the right order." },
-    glasses: { title: "Found Dadi's glasses", note: "On top of her head. Every single time." },
-    story: { title: "The monkey and the crocodile", note: "Dadi's story — a clever monkey and a very hungry river." },
-    answered: { title: "“बहुत अच्छी, दादी!”", note: "Dadi asked how you liked her story. You told her — in Hindi." },
-  },
-  chapters: [
-    { n: "01", name: "Dadi's Here", native: "दादी आईं", subtitle: "The first day of summer", body: "Greet Dadi, make her chai, find her glasses and hear her story.", available: true },
-    { n: "02", name: "The Bazaar", native: "बाज़ार", subtitle: "Chaat and bargaining", body: "Follow Dadi through a Lucknow market — count rupees, taste chaat, and learn how to say “too expensive”.", available: false },
-    { n: "03", name: "The Kitchen", native: "रसोई", subtitle: "Round rotis, eventually", body: "Roll rotis with Dadi until one of them is actually round.", available: false },
-    { n: "04", name: "Holi", native: "होली", subtitle: "The festival of colours", body: "Gulal, water balloons and gujiya — and why nobody minds going home a little pink.", available: false },
-    { n: "05", name: "Stories", native: "कहानियाँ", subtitle: "Akbar and Birbal", body: "More Panchatantra, and the clever minister Birbal outwitting everyone at court.", available: false },
-    { n: "06", name: "Family", native: "परिवार", subtitle: "The call home", body: "A video call to Lucknow. Chachi, cousins, and one very loud uncle.", available: false },
-  ],
-  highlight: { native: "कहानी कैसी लगी?", roman: "kahaani kaisi lagi?", english: "How did you like the story?", context: "Dadi asks after her story. You answer without looking anything up." },
   preview: <BaithakArt done={new Set()} />,
 };
 
+export default content;

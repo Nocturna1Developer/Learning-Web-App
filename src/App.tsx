@@ -52,8 +52,8 @@ export default function App() {
         <Route path="/app" element={<AppLayout />}>
           <Route index element={<AppHome />} />
           <Route path="play" element={<Play />} />
-          <Route path="play/chapter-one" element={<Navigate to="/app/play/telugu" replace />} />
-          <Route path="play/:lang" element={<JourneyPlayer />} />
+          <Route path="play/chapter-one" element={<Navigate to="/app/play/telugu/1" replace />} />
+          <Route path="play/:lang/:n?" element={<JourneyPlayer />} />
           <Route path="world" element={<WorldPage />} />
           <Route path="journal" element={<JournalPage />} />
           <Route path="languages" element={<AppLanguages />} />

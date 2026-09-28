@@ -1,10 +1,13 @@
+/* Eleven worlds: four columns with Telugu — where ROOTS began — spanning two,
+   so every row is full at every breakpoint. */
 .langgrid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: clamp(0.75rem, 1.4vw, 1.25rem);
 }
-.langgrid--full { grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
 .langgrid__cell { display: flex; }
+.langgrid__cell:first-child { grid-column: span 2; }
+.langgrid__cell:first-child .langcard__art { aspect-ratio: 8 / 5; }
 
 .langcard {
   flex: 1;
@@ -46,6 +49,20 @@
   color: var(--paper);
   text-shadow: 0 2px 30px rgba(0,0,0,0.6);
   transition: transform 0.8s var(--ease-out);
+}
+.langcard__native--ur { line-height: 2; }
+.langcard__rank {
+  position: absolute;
+  left: var(--space-3); top: var(--space-3);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: rgba(15,14,11,0.55);
+  border: 1px solid rgba(244,236,221,0.18);
+  border-radius: 100px;
+  padding: 0.35em 0.8em;
 }
 .langcard:hover .langcard__native { transform: scale(1.06); }
 
@@ -100,6 +117,5 @@
 }
 @media (max-width: 640px) {
   .langgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .langgrid__cell:first-child { grid-column: 1 / -1; }
-  .langgrid__cell:first-child .langcard__art { aspect-ratio: 16 / 9; }
+  .langcard__native { font-size: 2rem; }
 }

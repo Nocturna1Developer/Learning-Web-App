@@ -1,0 +1,117 @@
+import type { Language } from "../types";
+
+/* ARABIC · Levantine, as spoken at home · A Levantine family. One Arabic-speaking world among many: Egyptian, Gulf, Maghrebi and others would each be their own journey. */
+
+const meta: Language = {
+  id: "arabic",
+  lang: "ar",
+  speech: "ar",
+  language: "Arabic",
+  native: "العربية",
+  family: "A Levantine family",
+  variety: "Levantine Arabic, as spoken at home",
+  script: "ar",
+  dir: "rtl",
+  romanize: true,
+  line: "A Levantine family, from Sunday lunch at Teta's to the olive harvest in her village. Other Arabic-speaking regions will each be their own world.",
+  journeys: ["Family and hospitality", "Food and celebration", "Stories and poetry", "Regional customs and everyday language"],
+  a: "#3f7d55",
+  b: "#c8704a",
+  rank: 6,
+  speakers: {
+    teta: { name: "Teta", glyph: "ت", tone: "elder" },
+    jiddo: { name: "Jiddo", glyph: "ج", tone: "elder" },
+    khalto: { name: "Khalto", glyph: "خ", tone: "guest" },
+    guide: { name: "Your journal", glyph: "✦", tone: "guide" },
+    you: { name: "{name}", glyph: "", tone: "you" },
+  },
+  words: [
+    { id: "mayy", native: "مي", roman: "mayy", english: "water", group: "food", where: "the jug in the kitchen", ch: 1 },
+    { id: "khubz", native: "خبز", roman: "khubz", english: "bread", group: "food", where: "the bag in the kitchen", ch: 1 },
+    { id: "zaytoon", native: "زيتون", roman: "zaytoon", english: "olives", group: "food", where: "a jar in the kitchen", ch: 1 },
+    { id: "sukkar", native: "سكر", roman: "sukkar", english: "sugar", group: "food", where: "the tin in the kitchen", ch: 1 },
+    { id: "laymoon", native: "ليمون", roman: "laymoon", english: "lemon", group: "food", where: "the balcony", ch: 1 },
+    { id: "ahwe", native: "قهوة", roman: "ahwe", english: "coffee", group: "food", where: "Jiddo's coffee pot", ch: 1 },
+    { id: "hummus", native: "حمص", roman: "hummus", english: "hummus", group: "food", where: "the table", ch: 1 },
+    { id: "bayt", native: "بيت", roman: "bayt", english: "home · house", group: "home", where: "the photo of Teta's old house", ch: 1 },
+    { id: "yasmeen", native: "ياسمين", roman: "yasmeen", english: "jasmine", group: "home", where: "the balcony", ch: 1 },
+    { id: "ayle", native: "عيلة", roman: "‘ayle", english: "family", group: "family", where: "the photos in the salon", ch: 1 },
+    { id: "mama", native: "ماما", roman: "mama", english: "mom", group: "family", where: "a photo in the salon", ch: 1 },
+    { id: "baba", native: "بابا", roman: "baba", english: "dad", group: "family", where: "his chair on the balcony", ch: 1 },
+    { id: "teta", native: "تيتا", roman: "teta", english: "grandma", group: "family", where: "the kitchen", ch: 1 },
+    { id: "jiddo", native: "جدو", roman: "jiddo", english: "grandpa", group: "family", where: "the salon", ch: 1 },
+  ],
+  cultureNotes: {
+    coffee: { title: "Arabic coffee", native: "قهوة", note: "Boiled with cardamom in a long-handled pot. Offering it is the first thing you do for a guest." },
+    village: { title: "Teta's village", native: "الضيعة", note: "The house Teta grew up in, and olive trees Jiddo says are hundreds of years old." },
+    zaatar: { title: "Za'atar", native: "زعتر", note: "Wild thyme, sumac and sesame. With olive oil on warm bread, it's breakfast." },
+    oil: { title: "Olive oil from home", native: "زيت زيتون", note: "A tin from the village. Teta won't cook with any other." },
+    naana: { title: "Fresh mint", native: "نعنع", note: "For the tea after lunch — and the tabbouleh, and the lemonade." },
+    hospitality: { title: "Hospitality", native: "الضيافة", note: "The guest eats first and eats most. Saying no to a second plate is only the start of the conversation." },
+    juha: { title: "Juha", native: "جحا", note: "The wise fool of Arabic folk tales, told for centuries across the Arab world — a cousin of Nasreddin Hodja in Turkish stories." },
+  },
+  memoryNotes: {
+    kitchen: { title: "Helped Teta in the kitchen", note: "Bread, olives, water, sugar — found by ear, in Arabic." },
+    table: { title: "Set the table for the guests", note: "Bread, olives, hummus and lemons. Nobody will leave hungry." },
+    story: { title: "Juha and his donkey", note: "Pleasing everyone is a goal no one reaches." },
+    welcome: { title: "“أهلا وسهلا!”", note: "You opened the door and welcomed the family in Arabic." },
+  },
+  chapters: [
+    {
+      n: 1,
+      name: "Ahlan wa Sahlan",
+      native: "أهلا وسهلا",
+      subtitle: "Sunday lunch at Teta's",
+      synopsis:
+        "Sunday lunch at Teta and Jiddo's, in Levantine Arabic. Pick lemons on the balcony, help Teta in the kitchen, set a table no guest could leave hungry — and when the doorbell rings, welcome the family the way Teta taught you.",
+      homeLines: {
+        start: "Sunday lunch at Teta's. The guests arrive in an hour.",
+        going: "Teta's still cooking and the table's still bare.",
+        done: "The family's all inside and lunch is served. Next: the souk.",
+      },
+    },
+    {
+      n: 2,
+      name: "The Souk",
+      native: "السوق",
+      subtitle: "Za'atar by the kilo",
+      synopsis: "A summer morning in Teta's town. Walk the souk with her, count out ka'ak for the family, and master the art of the polite refusal.",
+      homeLines: { start: "Teta's at the door with her basket.", going: "The souk's busy, and Teta still has a list.", done: "Basket full, bargains won. Next: ma'amoul." },
+    },
+    {
+      n: 3,
+      name: "Ma'amoul",
+      native: "المعمول",
+      subtitle: "Cookies for the feast",
+      synopsis: "Teta's kitchen before the feast. Press dough into carved wooden moulds — and learn why the shape tells you what's inside. Many Levantine families bake the same cookies for Eid and for Easter.",
+      homeLines: { start: "Teta's got the wooden moulds out.", going: "The trays aren't full yet.", done: "Three trays of ma'amoul. Next: the village." },
+    },
+    {
+      n: 4,
+      name: "The Village",
+      native: "الضيعة",
+      subtitle: "Olive harvest",
+      synopsis: "Autumn in Teta's village: nets under the trees, everyone up a ladder, and the first bottle of new oil. Then dabke, when the work is done.",
+      homeLines: { start: "The nets are down. The olives are waiting.", going: "The nets are still filling up.", done: "The new oil's pressed. Next: stories." },
+    },
+    {
+      n: 5,
+      name: "Hikayat",
+      native: "حكايات",
+      subtitle: "Stories after dinner",
+      synopsis: "After dinner in the village, Teta tells the story of Nus Nsays — Half-Half, the smallest boy in the village, and the cleverest.",
+      homeLines: { start: "Teta's settled on the cushions. Time for a story.", going: "Nus Nsays is still in trouble.", done: "Half a boy, twice as clever. Next: the family." },
+    },
+    {
+      n: 6,
+      name: "The Family",
+      native: "العيلة",
+      subtitle: "Calling the village",
+      synopsis: "Home again. A video call to the whole family in the village — uncles, aunts and cousins who talk faster than anyone you've ever met.",
+      homeLines: { start: "The village is calling.", going: "Everyone's still on the call.", done: "The whole family, by name. You've finished the Arabic journey." },
+    }
+  ],
+  highlight: { native: "أهلا وسهلا!", roman: "ahlan wa sahlan!", english: "Welcome!", context: "What you say when you open the door to your family. They answer in Arabic — and you understand." },
+};
+
+export default meta;

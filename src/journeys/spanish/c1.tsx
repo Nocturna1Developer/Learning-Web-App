@@ -1,7 +1,7 @@
-import type { Journey, Word } from "./types";
-import { Defs, Walls, Door, Window, PhotoFrame, FLOOR_Y, WOOD, FRAME } from "../game/rooms";
-import { Figure, Child, House, Pot } from "../components/scenes/primitives";
-import { Icon, Panel } from "./kit";
+import type { ChapterContent } from "../types";
+import { Defs, Walls, Door, Window, PhotoFrame, FLOOR_Y, WOOD, FRAME } from "../../game/rooms";
+import { Figure, Child, House, Pot } from "../../components/scenes/primitives";
+import { Icon, Panel } from "../kit";
 
 /* =====================================================================
    SPANISH · A Mexican-American family
@@ -9,20 +9,6 @@ import { Icon, Panel } from "./kit";
    Halloween; in this house Abuela is getting ready for Día de Muertos.
    ===================================================================== */
 
-const words: Word[] = [
-  { id: "agua", native: "agua", roman: "agua", english: "water", group: "food", where: "the pitcher in the kitchen" },
-  { id: "pan", native: "pan", roman: "pan", english: "bread", group: "food", where: "the basket of pan dulce" },
-  { id: "sal", native: "sal", roman: "sal", english: "salt", group: "food", where: "the kitchen counter" },
-  { id: "vela", native: "vela", roman: "vela", english: "candle", group: "home", where: "a box in the kitchen" },
-  { id: "flor", native: "flor", roman: "flor", english: "flower", group: "home", where: "a pot on the patio" },
-  { id: "casa", native: "casa", roman: "casa", english: "home · house", group: "home", where: "the living-room window" },
-  { id: "foto", native: "foto", roman: "foto", english: "photo", group: "home", where: "the ofrenda" },
-  { id: "familia", native: "familia", roman: "familia", english: "family", group: "family", where: "the photos on the wall" },
-  { id: "mama", native: "mamá", roman: "mamá", english: "mom", group: "family", where: "the kitchen" },
-  { id: "papa", native: "papá", roman: "papá", english: "dad", group: "family", where: "his guitar" },
-  { id: "abuela", native: "abuela", roman: "abuela", english: "grandmother", group: "family", where: "the armchair" },
-  { id: "bisabuelo", native: "bisabuelo", roman: "bisabuelo", english: "great-grandfather", group: "family", where: "the ofrenda" },
-];
 
 /* ---------------- art ---------------- */
 
@@ -399,26 +385,9 @@ const story = [
 
 /* ---------------- the journey ---------------- */
 
-export const spanish: Journey = {
-  id: "spanish",
-  language: "Spanish",
-  native: "Español",
-  family: "A Mexican-American family",
-  variety: "Spanish · Mexican",
-  script: "es",
-  romanize: false,
-  speech: "es",
-  chapterName: "La Ofrenda",
-  chapterNative: "La Ofrenda",
-  subtitle: "Día de Muertos at home",
-  synopsis:
-    "October 31st in a Mexican-American home. Across the street, kids are trick-or-treating; in the living room, Abuela is getting the ofrenda ready for your great-grandfather. Pick the cempasúchil, help Mamá in the kitchen, build the ofrenda — and hear the story of the man in the photo.",
-  homeLines: {
-    start: "It's October 31st. Abuela needs help building the ofrenda.",
-    going: "The ofrenda is still waiting. Abuela is in her armchair.",
-    done: "The ofrenda is built and Bisabuelo Ramón has his story back. El Mercado is being built.",
-  },
-  words,
+/* ---------------- the chapter ---------------- */
+
+const content: ChapterContent = {
   startRoom: "sala",
   rooms: {
     sala: {
@@ -469,13 +438,7 @@ export const spanish: Journey = {
       ],
     },
   },
-  speakers: {
-    abuela: { name: "Abuela", glyph: "A", tone: "elder" },
-    mama: { name: "Mamá", glyph: "M", tone: "parent" },
-    guide: { name: "Your journal", glyph: "✦", tone: "guide" },
-    you: { name: "{name}", glyph: "", tone: "you" },
-  },
-  chapter: {
+  script: {
     intro: {
       kicker: "Capítulo uno · Spanish",
       title: "La",
@@ -639,31 +602,10 @@ export const spanish: Journey = {
       title: "La",
       em: "Ofrenda",
       text: "You built the ofrenda, heard your bisabuelo's story, and told Abuela who he was — in Spanish.",
-      next: "Capítulo dos — El Mercado — is being built.",
       quest: { v: "Stay with Abuela a while", hint: "Or head back to ROOTS Home." },
     },
   },
-  cultureNotes: {
-    rebozo: { title: "Abuela's rebozo", native: "rebozo", note: "A woven shawl from Michoacán. She wears it for anything that matters and folds it over the sofa in between." },
-    cempasuchil: { title: "Cempasúchil", native: "cempasúchil", note: "Mexican marigolds. The name comes from Nahuatl, the language of the Aztecs. Their colour and scent are said to guide the dead home." },
-    molcajete: { title: "Molcajete", native: "molcajete", note: "A three-legged bowl carved from volcanic stone, for grinding salsa. Older than Mamá." },
-    ofrenda: { title: "The ofrenda", native: "ofrenda", note: "An altar of remembrance for Día de Muertos: photos, candles, flowers, water, salt, and the food the person loved." },
-    papel: { title: "Papel picado", native: "papel picado", note: "Tissue paper cut into lace-like banners, strung over the ofrenda." },
-  },
-  memoryNotes: {
-    kitchen: { title: "Helped Mamá in the kitchen", note: "Bread, water, candles, salt — passed by ear, in Spanish." },
-    ofrenda: { title: "Built the ofrenda", note: "His photo at the top. Candles, marigolds and pan de muerto below." },
-    story: { title: "Bisabuelo Ramón's story", note: "From a pueblo in Michoacán to a panadería on your street." },
-    remember: { title: "“Es mi bisabuelo.”", note: "Abuela asked who he was. You told her — in Spanish." },
-  },
-  chapters: [
-    { n: "01", name: "La Ofrenda", native: "La Ofrenda", subtitle: "Día de Muertos at home", body: "Build the ofrenda with Abuela and hear the story of the man in the photo.", available: true },
-    { n: "02", name: "El Mercado", native: "El Mercado", subtitle: "Sunday at the tianguis", body: "An open-air market in Michoacán. Count pesos, ask for un kilo de tomates, and find out why everyone knows Abuela.", available: false },
-    { n: "03", name: "La Tamalada", native: "La Tamalada", subtitle: "Tamales take all day", body: "The whole family around one table spreading masa — and the stories that come out when hands are busy.", available: false },
-    { n: "04", name: "Las Posadas", native: "Las Posadas", subtitle: "Nine nights before Christmas", body: "Knock on doors, sing the verses, break the piñata. A tradition that turns a street into a family.", available: false },
-    { n: "05", name: "Los Cuentos", native: "Los Cuentos", subtitle: "Stories with the lights low", body: "Legends and family tales — the ones Abuela saves for late at night.", available: false },
-    { n: "06", name: "La Familia", native: "La Familia", subtitle: "Two homes, one family", body: "A video call to the pueblo. Use everything you've learned with cousins who've never spoken English to you.", available: false },
-  ],
-  highlight: { native: "¿Y quién es él?", roman: "", english: "And who is he?", context: "Abuela points to the photo at the top of the ofrenda. By then, you know the answer." },
   preview: <SalaArt done={new Set(["ofrenda"])} />,
 };
+
+export default content;

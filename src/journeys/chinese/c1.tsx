@@ -1,7 +1,7 @@
-import type { Journey, Word } from "./types";
-import { Defs, Walls, Door, PhotoFrame, FLOOR_Y, WOOD } from "../game/rooms";
-import { Figure, House } from "../components/scenes/primitives";
-import { Portrait, Icon, Panel } from "./kit";
+import type { ChapterContent } from "../types";
+import { Defs, Walls, Door, PhotoFrame, FLOOR_Y, WOOD } from "../../game/rooms";
+import { Figure, House } from "../../components/scenes/primitives";
+import { Portrait, Icon, Panel } from "../kit";
 
 /* =====================================================================
    CHINESE · Mandarin, simplified characters · A Chinese-American family
@@ -12,22 +12,6 @@ const SC = "'Noto Serif SC', 'Songti SC', 'SimSun', serif";
 const RED = "#c0392b";
 const GOLD = "#e8c25a";
 
-const words: Word[] = [
-  { id: "shui", native: "水", roman: "shuǐ", english: "water", group: "food", where: "the kettle in the kitchen" },
-  { id: "jiaozi", native: "饺子", roman: "jiǎozi", english: "dumplings", group: "food", where: "Nǎinai's board" },
-  { id: "mianfen", native: "面粉", roman: "miànfěn", english: "flour", group: "food", where: "the kitchen counter" },
-  { id: "baicai", native: "白菜", roman: "báicài", english: "napa cabbage", group: "food", where: "the kitchen counter" },
-  { id: "kuaizi", native: "筷子", roman: "kuàizi", english: "chopsticks", group: "home", where: "the sideboard" },
-  { id: "wan", native: "碗", roman: "wǎn", english: "bowl", group: "home", where: "the sideboard" },
-  { id: "fu", native: "福", roman: "fú", english: "good fortune", group: "home", where: "the front door" },
-  { id: "denglong", native: "灯笼", roman: "dēnglong", english: "lantern", group: "home", where: "the front hall" },
-  { id: "hongbao", native: "红包", roman: "hóngbāo", english: "red envelope", group: "home", where: "Nǎinai's sleeve" },
-  { id: "jia", native: "家", roman: "jiā", english: "home · family", group: "family", where: "the photo in the hall" },
-  { id: "mama", native: "妈妈", roman: "māma", english: "mom", group: "family", where: "the dinner table" },
-  { id: "baba", native: "爸爸", roman: "bàba", english: "dad", group: "family", where: "the dinner table" },
-  { id: "nainai", native: "奶奶", roman: "nǎinai", english: "grandma (dad's mother)", group: "family", where: "the dining room" },
-  { id: "yeye", native: "爷爷", roman: "yéye", english: "grandpa (dad's father)", group: "family", where: "the dinner table" },
-];
 
 /* ---------------- art ---------------- */
 
@@ -332,26 +316,9 @@ const story = [
 
 /* ---------------- the journey ---------------- */
 
-export const chinese: Journey = {
-  id: "chinese",
-  language: "Chinese",
-  native: "中文",
-  family: "A Chinese-American family",
-  variety: "Mandarin · simplified characters",
-  script: "zh",
-  romanize: true,
-  speech: "zh",
-  chapterName: "Reunion Dinner",
-  chapterNative: "团圆饭",
-  subtitle: "New Year's Eve at home",
-  synopsis:
-    "Lunar New Year's Eve in a Chinese-American home. Put the 福 on the door (upside down, on purpose), wrap dumplings with Nǎinai, seat the family around the round table — and find out why everything tonight is red.",
-  homeLines: {
-    start: "It's New Year's Eve, and the 福 still isn't on the door.",
-    going: "Nǎinai is at the dining table. Reunion dinner won't make itself.",
-    done: "Reunion dinner is done and your hóngbāo is safe. The Morning Market is being built.",
-  },
-  words,
+/* ---------------- the chapter ---------------- */
+
+const content: ChapterContent = {
   startRoom: "menkou",
   rooms: {
     menkou: {
@@ -404,13 +371,7 @@ export const chinese: Journey = {
       ],
     },
   },
-  speakers: {
-    nainai: { name: "Nǎinai", glyph: "奶", tone: "elder" },
-    mama: { name: "Māma", glyph: "妈", tone: "parent" },
-    guide: { name: "Your journal", glyph: "✦", tone: "guide" },
-    you: { name: "{name}", glyph: "", tone: "you" },
-  },
-  chapter: {
+  script: {
     intro: {
       kicker: "第一章 · Chinese",
       title: "Reunion",
@@ -577,35 +538,10 @@ export const chinese: Journey = {
       title: "Reunion",
       em: "Dinner",
       text: "You put up the fú, wrapped dumplings, seated the family and wished Nǎinai a happy New Year — in Mandarin.",
-      next: "第二章 — The Morning Market — is being built.",
       quest: { v: "Wait up for midnight", hint: "Or head back to ROOTS Home." },
     },
   },
-  cultureNotes: {
-    fu: { title: "The upside-down 福", native: "福到了", note: "倒 (dào, upside down) sounds exactly like 到 (dào, arrive) — so an upside-down fú says good fortune has arrived." },
-    couplets: { title: "Spring couplets", native: "春联", note: "Two matching lines of poetry pasted either side of the door, with a four-character blessing across the top." },
-    bamboo: { title: "Lucky bamboo", native: "富贵竹", note: "Given in threes, fives and eights. Never four — 四 (sì) sounds like 死 (sǐ)." },
-    plum: { title: "Plum blossom", native: "梅花", note: "The flower that blooms in the cold. A picture of patience." },
-    fish: { title: "Fish for plenty", native: "年年有余", note: "鱼 (yú, fish) sounds like 余 (yú, surplus). A whole fish on the table means plenty every year." },
-    jiaozi: { title: "Dumplings", native: "饺子", note: "Folded to look like old silver ingots. Many families, especially in the north, make them together on New Year's Eve." },
-    seating: { title: "The seat of honour", native: "上座", note: "Facing the door, for the eldest — even at a round table." },
-    nian: { title: "The story of Nián", native: "年", note: "The monster scared off by red and noise. 过年 — celebrating New Year — literally means “getting past Nián”." },
-    steamer: { title: "Bamboo steamers", native: "蒸笼", note: "Stacked three high over one pot of boiling water." },
-  },
-  memoryNotes: {
-    dumplings: { title: "Made dumplings with Nǎinai", note: "Flour, water, cabbage, a bowl — fetched in Mandarin." },
-    table: { title: "Seated the family", note: "Yéye facing the door, everyone in their place." },
-    story: { title: "The story of Nián", note: "Why everything tonight is red." },
-    newyear: { title: "“新年快乐！”", note: "Nǎinai gave you a hóngbāo. You thanked her the right way." },
-  },
-  chapters: [
-    { n: "01", name: "Reunion Dinner", native: "团圆饭", subtitle: "New Year's Eve at home", body: "Put up the fú, make dumplings with Nǎinai, and hear why everything tonight is red.", available: true },
-    { n: "02", name: "The Morning Market", native: "早市", subtitle: "Numbers before breakfast", body: "Buy scallions, count change, and learn which stall Nǎinai trusts.", available: false },
-    { n: "03", name: "Noodles by Hand", native: "拉面", subtitle: "Long life, one pull at a time", body: "Stretch dough with Yéye, and learn why birthday noodles are never cut.", available: false },
-    { n: "04", name: "Mid-Autumn", native: "中秋", subtitle: "Mooncakes and lanterns", body: "Carry a lantern under the full moon and share one mooncake cut into as many pieces as there are people.", available: false },
-    { n: "05", name: "Stories", native: "故事", subtitle: "Chang'e and the moon", body: "The woman who flew to the moon, the rabbit who keeps her company, and the stories Nǎinai tells about her own town.", available: false },
-    { n: "06", name: "Home", native: "家", subtitle: "Calling across the ocean", body: "A video call to the cousins. Their dialect is different; the teasing is exactly the same.", available: false },
-  ],
-  highlight: { native: "新年快乐！", roman: "xīnnián kuàilè!", english: "Happy New Year!", context: "What you say when Nǎinai hands you a red envelope — before you've even thought about it." },
   preview: <DiningArt done={new Set(["dumplings", "seats"])} />,
 };
+
+export default content;

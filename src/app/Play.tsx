@@ -1,28 +1,30 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "motion/react";
-import { Native } from "../journeys/render";
-import { roomArt } from "../journeys/types";
-import { useGame, journeyStats } from "../state/store";
+import { Native, ChapterArt } from "../journeys/render";
+import { useGame, chapterStats, langStats } from "../state/store";
 import { sfx } from "../lib/sfx";
 import { LanguageTabs } from "./LanguageTabs";
+import { ChapterRows } from "./ChapterRows";
 import "./app.css";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 export function Play() {
-  const { progress, activeJourney: j, dispatch } = useGame();
+  const { progress, active: l, dispatch } = useGame();
   const navigate = useNavigate();
-  const s = journeyStats(j, progress.journeys[j.id]);
-  const [first, ...rest] = j.chapters;
-  // Chapters without their own art borrow a chapter-one room, dimmed.
-  const rooms = Object.values(j.rooms);
+  const location = useLocation();
+  const lp = progress.journeys[l.id];
+  const n = langStats(l, lp).current;
+  const meta = l.chapters[n - 1];
+  const s = chapterStats(l, lp, n);
+  const locked = (location.state as { locked?: string } | null)?.locked;
 
   const restart = () => {
     if (!s.started) return;
-    if (!window.confirm(`Restart ${j.language} Chapter One? Discoveries in this language reset; your other languages are untouched.`)) return;
-    dispatch({ type: "restart", j: j.id });
+    if (!window.confirm(`Restart ${l.language} Chapter ${n}? Its story starts over; words and journal entries you've found stay.`)) return;
+    dispatch({ type: "restart", j: l.id, n });
     sfx.door();
-    navigate(`/app/play/${j.id}`);
+    navigate(`/app/play/${l.id}/${n}`);
   };
 
   return (
@@ -30,24 +32,25 @@ export function Play() {
       <motion.div className="page__head" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: EASE }}>
         <p className="page__kicker">Play</p>
         <h1 className="page__title">{s.started && !s.complete ? <>Continue your <em>journey</em>.</> : <>Choose your <em>journey</em>.</>}</h1>
+        {locked && <p className="page__lede page__notice">That chapter opens when you finish the one before it.</p>}
       </motion.div>
 
       <LanguageTabs />
 
-      <motion.section key={j.id} className="banner" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: EASE }}>
-        <div className="banner__art">{j.preview}</div>
+      <motion.section key={`${l.id}-${n}`} className="banner" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: EASE }}>
+        <div className="banner__art"><ChapterArt l={l} n={n} /></div>
         <div className="banner__grade" />
         <div className="banner__content">
-          <span className="banner__status">{s.complete ? "Chapter complete" : s.started ? "Continue journey" : "Available now"} · {j.family}</span>
-          <p className="chapter-row__n banner__n">{j.language} · Chapter {first.n}</p>
-          <h2 className="banner__title">{j.chapterName}</h2>
-          <p className="banner__sub"><Native j={j}>{j.chapterNative}</Native>{j.chapterNative !== j.chapterName && <> · </>}{j.subtitle}</p>
+          <span className="banner__status">{s.complete ? "Chapter complete" : s.started ? "Continue" : "Up next"} · {l.family}</span>
+          <p className="chapter-row__n banner__n">{l.language} · Chapter {n} of {l.chapters.length}</p>
+          <h2 className="banner__title">{meta.name}</h2>
+          <p className="banner__sub"><Native j={l}>{meta.native}</Native>{meta.native !== meta.name && <> · </>}{meta.subtitle}</p>
           <div className="progress banner__progress">
             <div className="progress__row"><span>Progress</span><strong>{s.pct}%</strong></div>
             <div className="progress__bar"><div className="progress__fill" style={{ width: `${s.pct}%` }} /></div>
           </div>
           <div className="btn-row banner__actions">
-            <Link to={`/app/play/${j.id}`} className="btn">
+            <Link to={`/app/play/${l.id}/${n}`} className="btn">
               <span className="btn__label">{s.complete ? "Play again" : s.started ? "Continue" : "Begin"}</span>
               <svg className="btn__arrow" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2 8h11M9 3.5 13.5 8 9 12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </Link>
@@ -56,28 +59,13 @@ export function Play() {
         </div>
       </motion.section>
 
-      <motion.section className="block" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.15, ease: EASE }}>
+      <section className="block">
         <div className="block__head">
-          <h2 className="block__title">Other chapters · {j.language}</h2>
+          <h2 className="block__title">All chapters · {l.language}</h2>
           <Link to="/app/world" className="block__more">The whole world →</Link>
         </div>
-        <div className="chapters">
-          {rest.map((c, i) => (
-            <article key={c.n} className="chapter-row chapter-row--locked" aria-label={`Chapter ${c.n} — ${c.name}, locked`}>
-              <div className="chapter-row__art">{c.art ?? roomArt(rooms[(i + 1) % rooms.length])}</div>
-              <div className="chapter-row__meta">
-                <p className="chapter-row__n">Chapter {c.n} · <Native j={j}>{c.native}</Native></p>
-                <p className="chapter-row__name">{c.name}</p>
-                <p className="chapter-row__sub">{c.subtitle}</p>
-              </div>
-              <span className="chapter-row__status">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></svg>
-                Locked · Coming soon
-              </span>
-            </article>
-          ))}
-        </div>
-      </motion.section>
+        <ChapterRows l={l} />
+      </section>
     </div>
   );
 }

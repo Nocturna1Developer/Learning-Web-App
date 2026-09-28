@@ -1,9 +1,13 @@
 import type { ReactNode } from "react";
 
 /**
- * A Journey is one language's world. The engine, mini-game mechanics and
- * journal are shared platform; everything in here — the home, the family,
- * the words, the story — belongs to one culture and is written for it.
+ * A Language is one culture's world in ROOTS: its family, its words, its six
+ * chapters. It's plain data, always loaded — the dashboard, journal and site
+ * need it. Each chapter's rooms, art and script live in their own module and
+ * load when that chapter is opened (see ChapterContent).
+ *
+ * The engine, mini-game mechanics and journal are shared platform; everything
+ * in a language's files belongs to one culture and is written for it.
  */
 
 export type WordGroup = "family" | "home" | "food";
@@ -18,6 +22,8 @@ export type Word = {
   group: WordGroup;
   /** where the player can first meet it */
   where: string;
+  /** the chapter that introduces it */
+  ch: number;
 };
 
 /**
@@ -31,6 +37,53 @@ export type Seg = string;
 export type Line = { who: string; text: Seg; gloss?: Seg; hint?: string };
 
 export type Speaker = { name: string; glyph: string; tone?: "elder" | "parent" | "guide" | "you" | "guest" };
+
+export type Script = "latin" | "te" | "zh" | "hi" | "ar" | "bn" | "ur" | "ru";
+
+export type ChapterMeta = {
+  n: number;
+  name: string;
+  native: string;
+  subtitle: string;
+  synopsis: string;
+  /** one line for dashboards: not started / in progress / done */
+  homeLines: { start: string; going: string; done: string };
+};
+
+export type Language = {
+  id: string;
+  /** BCP-47 tag for the lang attribute */
+  lang: string;
+  /** BCP-47 prefix for the Web Speech API voice */
+  speech: string;
+  language: string;
+  native: string;
+  /** whose family this is — kept specific on purpose */
+  family: string;
+  /** e.g. "Mandarin, simplified characters" */
+  variety: string;
+  script: Script;
+  dir?: "rtl";
+  romanize: boolean;
+  /** one line for the language card */
+  line: string;
+  /** cultural journeys this language is built to hold later — plural on purpose */
+  journeys: string[];
+  /** card colours */
+  a: string;
+  b: string;
+  /** Ethnologue rank by total speakers, if in the top ten */
+  rank?: number;
+  speakers: Record<string, Speaker>;
+  words: Word[];
+  cultureNotes: Record<string, { title: string; native?: string; note: string }>;
+  memoryNotes: Record<string, { title: string; note: string }>;
+  chapters: ChapterMeta[];
+  /** a moment from the journey, for the world page */
+  highlight: { native: string; roman: string; english: string; context: string };
+};
+
+/* ---------------- rooms ---------------- */
 
 export type Hotspot = {
   id: string;
@@ -70,12 +123,19 @@ export type FetchItem = { wordId: string; label: string; art: ReactNode };
 export type Choice = { native: string; roman: string; english: string; right?: boolean; reply?: Line[] };
 export type Question = { native: string; roman: string; english: string; choices: Choice[] };
 export type StoryPanel = { art: ReactNode; text: Seg };
+export type Said = { native: string; roman: string; english: string };
+export type CountRound = Said & { answer: number; wordId?: string };
+export type Step = Said & { wordId?: string; art: ReactNode };
 
 export type GameSpec =
   | { type: "place"; kicker: string; title: string; hint: string; tray: string; done: string; items: PlaceItem[]; board?: "album" | "table" | "altar" | "case" }
   | { type: "memory"; kicker: string; title: string; hint: string }
-  | { type: "fetch"; kicker: string; title: string; hint: string; npc: string; asks: FetchAsk[]; items: FetchItem[]; done: { native: string; roman: string; english: string } }
-  | { type: "story"; kicker: string; title: string; native: string; teller: string; panels: StoryPanel[]; question: Question };
+  | { type: "fetch"; kicker: string; title: string; hint: string; npc: string; asks: FetchAsk[]; items: FetchItem[]; done: Said }
+  | { type: "story"; kicker: string; title: string; native: string; teller: string; panels: StoryPanel[]; question: Question }
+  /** a vendor names a price or a quantity; the player counts it out */
+  | { type: "count"; kicker: string; title: string; hint: string; npc: string; unit: string; coin: ReactNode; rounds: CountRound[]; done: Said }
+  /** put steps in order: a recipe, a ritual, a set of directions */
+  | { type: "sequence"; kicker: string; title: string; hint: string; steps: Step[]; done: string };
 
 /* ---------------- chapter script ---------------- */
 
@@ -119,40 +179,16 @@ export type ChapterScript = {
   idle?: Record<string, Line[]>;
   /** said by npcs after the chapter is complete */
   afterwards?: Record<string, Line[]>;
-  complete: { title: string; em: string; text: string; next: string; quest: { v: string; hint: string } };
+  complete: { title: string; em: string; text: string; quest: { v: string; hint: string } };
 };
 
-export type ChapterMeta = { n: string; name: string; native: string; subtitle: string; body: string; available: boolean; art?: ReactNode };
-
-export type Journey = {
-  id: string;
-  language: string;
-  native: string;
-  /** whose family this first chapter is about — kept specific on purpose */
-  family: string;
-  /** e.g. "Mandarin, simplified characters" */
-  variety: string;
-  script: "te" | "es" | "zh" | "hi" | "ar";
-  dir?: "rtl";
-  romanize: boolean;
-  /** BCP-47 prefix for the Web Speech API voice */
-  speech: string;
-  chapterName: string;
-  chapterNative: string;
-  subtitle: string;
-  synopsis: string;
-  /** one line for dashboards: not started / in progress / done */
-  homeLines: { start: string; going: string; done: string };
-  words: Word[];
+/** One chapter's playable content — its own lazily loaded module. */
+export type ChapterContent = {
   rooms: Record<string, RoomDef>;
   startRoom: string;
-  speakers: Record<string, Speaker>;
-  chapter: ChapterScript;
-  cultureNotes: Record<string, { title: string; native?: string; note: string }>;
-  memoryNotes: Record<string, { title: string; note: string }>;
-  chapters: ChapterMeta[];
-  /** a moment from the chapter, for the world page */
-  highlight: { native: string; roman: string; english: string; context: string };
+  /** chapter-only characters (a vendor, a cousin) on top of the language's */
+  speakers?: Record<string, Speaker>;
+  script: ChapterScript;
   preview: ReactNode;
 };
 
