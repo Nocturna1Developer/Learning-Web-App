@@ -17,6 +17,7 @@ const meta: Language = {
   a: "#e07a2f",
   b: "#1f4d33",
   rank: 3,
+  cover: 4,
   speakers: {
     dadi: { name: "Dadi", glyph: "दा", tone: "elder" },
     maa: { name: "Maa", glyph: "माँ", tone: "parent" },

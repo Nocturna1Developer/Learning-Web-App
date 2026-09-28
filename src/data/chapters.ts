@@ -27,7 +27,7 @@ export const CHAPTERS: Chapter[] = [
     telugu: "ఊరు",
     subtitle: "Dirt lanes and tiled roofs",
     body: "A well that everyone meets at. You arrive knowing a little and have to find your way by asking.",
-    status: "soon",
+    status: "available",
     learn: ["Greetings", "Directions", "Names"],
   },
   {
@@ -37,7 +37,7 @@ export const CHAPTERS: Chapter[] = [
     telugu: "సంత",
     subtitle: "Language you can hold",
     body: "Bargain for tamarind. Count change. Learn the difference between what something is called and what it's worth.",
-    status: "soon",
+    status: "available",
     learn: ["Numbers", "Produce", "Asking for things"],
   },
   {
@@ -47,7 +47,7 @@ export const CHAPTERS: Chapter[] = [
     telugu: "సంక్రాంతి",
     subtitle: "Sankranti, from the inside",
     body: "Chalk a muggu before dawn, fly a kite until the string cuts your finger. Three days that explain a whole calendar.",
-    status: "soon",
+    status: "available",
     learn: ["Festival words", "Rituals", "Seasons"],
   },
   {
@@ -57,7 +57,7 @@ export const CHAPTERS: Chapter[] = [
     telugu: "కథలు",
     subtitle: "Told under the banyan",
     body: "Folk tales that travelled by voice for centuries — Tenali Rama's tricks, village legends, the ones with no written source at all.",
-    status: "soon",
+    status: "available",
     learn: ["Listening", "Storytelling", "Folklore"],
   },
   {
@@ -67,7 +67,7 @@ export const CHAPTERS: Chapter[] = [
     telugu: "బంధం",
     subtitle: "Where it stops being a game",
     body: "The last chapter asks you to use what you've learned on a real call, with real relatives, in real Telugu.",
-    status: "soon",
+    status: "available",
     learn: ["Conversation", "Confidence", "Connection"],
   },
 ];

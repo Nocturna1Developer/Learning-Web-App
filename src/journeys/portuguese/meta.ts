@@ -17,6 +17,7 @@ const meta: Language = {
   a: "#2f7d4a",
   b: "#d89a2a",
   rank: 8,
+  cover: 4,
   speakers: {
     vovo: { name: "Vovó", glyph: "V", tone: "elder" },
     avo: { name: "Vovô", glyph: "V", tone: "elder" },

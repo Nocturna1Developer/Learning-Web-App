@@ -49,7 +49,7 @@ export function LanguagesPage() {
                 { k: "Same platform", v: "Exploration, quests, contextual vocabulary, mini-games and the Heritage Journal are shared by every world." },
                 { k: "Different worlds", v: "Characters, homes, architecture, clothing, food, music, folklore and festivals are built for each culture, not translated from one." },
                 { k: "Room for difference", v: "Spanish starts with one Mexican-American family and is built to hold other Spanish-speaking family stories beside it. Chinese, Hindi and Arabic are built for regional worlds, not one flattened picture — the first Arabic journey is Levantine on purpose." },
-                { k: "Five first chapters", v: "Each was written for its own family — a Telugu home, a Mexican-American ofrenda, a Mandarin New Year's Eve, a grandmother's visit from Lucknow, a Levantine Sunday lunch. Every Chapter One is playable today; the chapters after them are being built." },
+                { k: "Sixty-six chapters", v: "Eleven worlds, six chapters each, every one written for its own family — Sankranti in a Telugu village, Las Posadas in Michoacán, Mid-Autumn in Shandong, Holi in Lucknow, the olive harvest in the Levant, a galette in Lyon, a festa junina in Minas Gerais, New Year in St. Petersburg, Pohela Boishakh in Bangladesh, Eid in Lahore and a panto in Yorkshire. All of them are playable today." },
               ].map((p, i) => (
                 <Reveal key={p.k} delay={i * 0.07} className="langs-principle__item">
                   <p className="langs-principle__k">{p.k}</p>

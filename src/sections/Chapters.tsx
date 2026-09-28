@@ -31,7 +31,7 @@ export function Chapters() {
           <Reveal delay={0.15}>
             <p className="lede">
               ROOTS unfolds in chapters, each one a place with its own people and reasons to speak.
-              The first is playable now. The rest are being built.
+              All six are playable now — in Telugu, and in ten more languages.
             </p>
           </Reveal>
         </div>
@@ -62,20 +62,17 @@ export function Chapters() {
         <div className="chapter-track">
           {rest.map((c, i) => (
             <Reveal key={c.id} delay={i * 0.06} className="chapter-tile-wrap" amount={0.1}>
-              <article className="chapter-tile" aria-label={`Chapter ${c.n} — ${c.name}, coming soon`}>
+              <Link to={playTo} className="chapter-tile" aria-label={`Chapter ${c.n} — ${c.name}, playable now`}>
                 <div className="chapter-tile__art">
                   {ART[c.id]}
                   <div className="chapter-tile__grade" />
-                  <span className="chapter-tile__lock" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="5" y="11" width="14" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></svg>
-                  </span>
                 </div>
                 <div className="chapter-tile__body">
                   <p className="chapter-tile__n">Chapter {c.n}</p>
                   <h4 className="chapter-tile__name display">{c.name}</h4>
-                  <p className="chapter-tile__soon">Coming soon</p>
+                  <p className="chapter-tile__soon">{c.subtitle}</p>
                 </div>
-              </article>
+              </Link>
             </Reveal>
           ))}
         </div>

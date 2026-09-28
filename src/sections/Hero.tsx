@@ -82,7 +82,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.3, ease: EASE }}
         >
-          Five languages · Chapter One available now
+          Eleven languages · 66 chapters, all playable
         </motion.p>
 
         <h1 className="hero__headline display display--hero">

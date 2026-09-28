@@ -17,6 +17,7 @@ const meta: Language = {
   a: "#3a5a9a",
   b: "#b8452f",
   rank: 5,
+  cover: 2,
   speakers: {
     mamie: { name: "Mamie", glyph: "M", tone: "elder" },
     papi: { name: "Papi", glyph: "P", tone: "elder" },

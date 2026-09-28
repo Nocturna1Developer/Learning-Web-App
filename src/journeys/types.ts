@@ -81,6 +81,8 @@ export type Language = {
   chapters: ChapterMeta[];
   /** a moment from the journey, for the world page */
   highlight: { native: string; roman: string; english: string; context: string };
+  /** the chapter whose scene stands for this world on cards and heroes (default 1) */
+  cover?: number;
 };
 
 /* ---------------- rooms ---------------- */

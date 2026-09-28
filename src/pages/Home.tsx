@@ -30,7 +30,7 @@ function LanguagesSection() {
           <Reveal delay={0.15}>
             <p className="lede">
               Each language is a doorway into a different cultural world — its own home, family and
-              story, not a translation of the same game. Chapter One is playable in all five.{" "}
+              story, not a translation of the same game. Eleven languages, six chapters each — every one playable.{" "}
               <Link to="/languages" className="inline-link">See how we think about it →</Link>
             </p>
           </Reveal>

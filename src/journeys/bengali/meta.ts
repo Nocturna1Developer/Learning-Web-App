@@ -17,6 +17,7 @@ const meta: Language = {
   a: "#1f6a4a",
   b: "#c8302a",
   rank: 7,
+  cover: 2,
   speakers: {
     nanu: { name: "Nanu", glyph: "না", tone: "elder" },
     nana: { name: "Nana", glyph: "না", tone: "elder" },

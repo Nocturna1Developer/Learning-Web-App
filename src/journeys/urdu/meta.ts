@@ -18,6 +18,7 @@ const meta: Language = {
   a: "#1f5a3a",
   b: "#b8452f",
   rank: 10,
+  cover: 2,
   speakers: {
     dadi: { name: "Dadi", glyph: "د", tone: "elder" },
     dada: { name: "Dada", glyph: "د", tone: "elder" },

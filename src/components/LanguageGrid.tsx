@@ -32,7 +32,7 @@ function LanguageCard({ l, href, cta, full }: { l: Language; href: string; cta: 
   return (
     <Link to={href} className="langcard" style={style} aria-label={`${l.language} — ${l.family}. ${cta}`}>
       <div className="langcard__art" aria-hidden="true">
-        <div className="langcard__scene"><ChapterArt l={l} n={1} /></div>
+        <div className="langcard__scene"><ChapterArt l={l} n={l.cover ?? 1} /></div>
         <span className="langcard__grade" />
         <span className={`langcard__native langcard__native--${l.script}`} style={{ fontFamily }} dir={l.dir}>{l.native}</span>
         <span className="langcard__rank">{l.rank ? `#${l.rank} most spoken` : "Where ROOTS began"}</span>

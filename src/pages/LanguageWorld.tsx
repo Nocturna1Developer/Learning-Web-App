@@ -36,7 +36,7 @@ export function LanguageWorld() {
       <main id="main" className="world-page">
         {/* ---- hero: the world itself ---- */}
         <section className="surface wp-hero grain" data-surface="dark">
-          <div className="wp-hero__scene" aria-hidden="true"><ChapterArt l={l} n={1} /></div>
+          <div className="wp-hero__scene" aria-hidden="true"><ChapterArt l={l} n={l.cover ?? 1} /></div>
           <div className="wp-hero__grade" aria-hidden="true" />
           <div className="container wp-hero__content">
             <Reveal><span className="eyebrow">{l.rank ? `#${l.rank} most spoken · ` : ""}{l.variety}</span></Reveal>
@@ -161,7 +161,7 @@ export function LanguageWorld() {
             <div className="wp-others">
               {languageList().filter((o) => o.id !== l.id).map((o) => (
                 <Link key={o.id} to={`/languages/${o.id}`} className="wp-other">
-                  <div className="wp-other__art"><ChapterArt l={o} n={1} /></div>
+                  <div className="wp-other__art"><ChapterArt l={o} n={o.cover ?? 1} /></div>
                   <Native j={o} className="wp-other__native">{o.native}</Native>
                   <span className="wp-other__name">{o.language}</span>
                 </Link>

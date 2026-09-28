@@ -11,8 +11,8 @@ export function AppLanguages() {
         <p className="page__kicker">Languages</p>
         <h1 className="page__title">One platform. Many <em>languages</em>.</h1>
         <p className="page__lede">
-          Each world has its own home, its own family and its own story — not a translation of the others. Chapter One is
-          playable in all five; the chapters after it are being built.
+          Each world has its own home, its own family and its own story — not a translation of the others. All six
+          chapters are playable in every one of the eleven.
         </p>
       </motion.div>
       <LanguageGrid hrefFor={(id) => `/app/play/${id}`} cta="Play" variant="full" />

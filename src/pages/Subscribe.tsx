@@ -18,7 +18,7 @@ const PLANS: { id: Plan; name: string; price: string; per: string; note: string;
 ];
 
 const INCLUDED = [
-  "The ROOTS game — Chapter One in five languages now, new chapters as they're released",
+  "The ROOTS game — eleven languages, six chapters each, and new worlds as they're released",
   "Contextual language learning woven through the world",
   "Every mini-game: Family Album, Memory Match, the Kitchen Quest and more",
   "The Heritage Journal — words, recipes, stories and family memories, kept",
@@ -144,7 +144,7 @@ export function Subscribe() {
                     <span className="display">{chosen.price}</span> <span>{chosen.per}</span>
                   </p>
                   <ul className="sub-confirm__list">
-                    <li>Immediate access to Chapter One in all five languages</li>
+                    <li>Immediate access to all 66 chapters, in eleven languages</li>
                     <li>Every chapter and language world as it opens</li>
                     <li>The Heritage Journal, yours to keep</li>
                   </ul>
@@ -173,7 +173,7 @@ export function Subscribe() {
                 </motion.span>
                 <RevealLines as="h1" className="display display--xl" lines={["Welcome to", <><em>ROOTS</em>.</>]} delay={0.2} />
                 <motion.p className="lede" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7, duration: 0.8, ease: EASE }}>
-                  Your journey begins now. Five first chapters are waiting, each at home — a normal one, with a
+                  Your journey begins now. Eleven worlds are waiting, each starting at home — a normal one, with a
                   family&rsquo;s story quietly everywhere in it.
                 </motion.p>
                 <motion.div className="btn-row" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.9, duration: 0.8, ease: EASE }}>

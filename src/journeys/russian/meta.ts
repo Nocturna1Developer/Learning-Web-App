@@ -17,6 +17,7 @@ const meta: Language = {
   a: "#2d4a8a",
   b: "#b8453a",
   rank: 9,
+  cover: 4,
   speakers: {
     babushka: { name: "Babushka", glyph: "Б", tone: "elder" },
     dedushka: { name: "Dedushka", glyph: "Д", tone: "elder" },

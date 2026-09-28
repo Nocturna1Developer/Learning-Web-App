@@ -43,7 +43,7 @@ export function Cta() {
 
         <Reveal delay={0.2}>
           <p className="lede cta__lede">
-            Begin in Telugu, Spanish, Mandarin, Hindi or Levantine Arabic. Learn the language. Discover
+            Begin in Telugu or any of the world's ten most spoken languages. Learn the language. Discover
             the culture. Hear the stories — and bring what you discover back home.
           </p>
         </Reveal>
