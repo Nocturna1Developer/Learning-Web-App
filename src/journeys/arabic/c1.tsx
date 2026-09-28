@@ -2,6 +2,7 @@ import type { ChapterContent } from "../types";
 import { Defs, Walls, Door, PhotoFrame, FLOOR_Y, WOOD, FRAME } from "../../game/rooms";
 import { Figure, Child, House, Pot } from "../../components/scenes/primitives";
 import { Icon, Panel } from "../kit";
+import { Rakweh, Tatreez } from "./art";
 
 /* =====================================================================
    ARABIC · Levantine, as spoken at home · A Levantine family
@@ -10,30 +11,7 @@ import { Icon, Panel } from "../kit";
    others would each be their own journey, not a reskin of this one.
    ===================================================================== */
 
-
 /* ---------------- art ---------------- */
-
-function Rakweh({ x, y, s = 1 }: { x: number; y: number; s?: number }) {
-  return (
-    <g transform={`translate(${x} ${y}) scale(${s})`}>
-      <path d="M-18 0 q-6 -34 8 -42 h20 q14 8 8 42Z" fill="#b87333" />
-      <path d="M-10 -42 l-4 -10 h28 l-4 10Z" fill="#9a5a24" />
-      <path d="M18 -30 q30 -4 50 -24" stroke="#5a3a22" strokeWidth="5" fill="none" strokeLinecap="round" />
-      <path d="M-14 -34 l-14 -8" stroke="#9a5a24" strokeWidth="4" />
-    </g>
-  );
-}
-
-function Tatreez({ x, y, w, h, c = "#b8252f" }: { x: number; y: number; w: number; h: number; c?: string }) {
-  return (
-    <g>
-      <rect x={x} y={y} width={w} height={h} rx="8" fill="#1a1a2a" />
-      {Array.from({ length: Math.floor(w / 18) }, (_, i) => Array.from({ length: Math.floor(h / 18) }, (_, r) => (
-        (i + r) % 2 === 0 ? <path key={`${i}${r}`} d={`M${x + 9 + i * 18} ${y + 3 + r * 18} l6 6 l-6 6 l-6 -6Z`} fill={r % 2 ? "#e8c25a" : c} /> : null
-      )))}
-    </g>
-  );
-}
 
 function Mezze({ x, y }: { x: number; y: number }) {
   return (
