@@ -17,10 +17,8 @@ import { Cta } from "../sections/Cta";
 import { Footer } from "../sections/Footer";
 import { Reveal, RevealLines } from "../components/Reveal";
 import { LanguageGrid } from "../components/LanguageGrid";
-import { useGame } from "../state/store";
 
 function LanguagesSection() {
-  const { session } = useGame();
   return (
     <section className="surface section grain" data-surface="dark" id="languages">
       <div className="container">
@@ -31,13 +29,13 @@ function LanguagesSection() {
           </div>
           <Reveal delay={0.15}>
             <p className="lede">
-              Each language is a doorway into a different cultural world — not a translation of the
-              same game. Telugu is playable now; four more worlds are in development.{" "}
+              Each language is a doorway into a different cultural world — its own home, family and
+              story, not a translation of the same game. Chapter One is playable in all five.{" "}
               <Link to="/languages" className="inline-link">See how we think about it →</Link>
             </p>
           </Reveal>
         </div>
-        <LanguageGrid playTo={session.user ? "/app/play" : "/subscribe"} />
+        <LanguageGrid hrefFor={(id) => `/languages/${id}`} cta="Explore" />
       </div>
     </section>
   );

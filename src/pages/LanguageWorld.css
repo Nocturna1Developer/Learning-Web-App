@@ -1,0 +1,87 @@
+/* ---- hero ---- */
+.wp-hero {
+  position: relative;
+  min-height: 92vh;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  isolation: isolate;
+  padding: clamp(8rem, 16vh, 11rem) 0 clamp(3rem, 7vh, 5rem);
+}
+.wp-hero__scene { position: absolute; inset: 0; z-index: -2; }
+.wp-hero__scene > svg { width: 100%; height: 100%; }
+.wp-hero__grade {
+  position: absolute; inset: 0; z-index: -1;
+  background:
+    linear-gradient(to right, rgba(15,14,11,0.92) 0%, rgba(15,14,11,0.7) 45%, rgba(15,14,11,0.15) 100%),
+    linear-gradient(to top, rgba(15,14,11,0.95) 0%, rgba(15,14,11,0) 55%),
+    linear-gradient(to bottom, rgba(15,14,11,0.6), rgba(15,14,11,0) 25%);
+}
+.wp-hero__content { display: grid; gap: var(--space-4); justify-items: start; max-width: var(--container); }
+.wp-hero__content .lede { max-width: 36em; }
+.wp-hero__native { font-size: clamp(2.6rem, 6vw, 5rem); line-height: 1.2; color: var(--sun-soft); }
+.wp-hero__meta { font-size: var(--text-xs); letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-muted); }
+
+/* ---- rooms ---- */
+.wp-rooms { display: grid; grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); gap: clamp(1rem, 2vw, 1.5rem); }
+.wp-room { display: grid; border-radius: var(--radius); overflow: hidden; background: var(--paper-2); border: 1px solid var(--line); }
+.wp-room__art { aspect-ratio: 16 / 9; overflow: hidden; }
+.wp-room__art > svg { width: 100%; height: 100%; transition: transform 1.2s var(--ease-out); }
+.wp-room:hover .wp-room__art > svg { transform: scale(1.04); }
+.wp-room__body { display: grid; gap: var(--space-1); padding: var(--space-4) var(--space-4) var(--space-4); }
+.wp-room__name { font-family: var(--font-display); font-size: var(--text-lg); line-height: 1.2; display: flex; gap: 0.5em; align-items: baseline; flex-wrap: wrap; }
+.wp-room__name span:last-child { color: var(--fg-muted); font-size: 0.8em; }
+.wp-room__native { color: var(--earth); }
+.wp-room__words { font-size: var(--text-base); color: var(--fg-soft); }
+
+/* ---- story ---- */
+.wp-story { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1rem, 2vw, 1.5rem); align-items: start; }
+.wp-story__panel { display: grid; gap: var(--space-3); }
+.wp-story__art { aspect-ratio: 400 / 240; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); }
+.wp-story__art svg { width: 100%; height: 100%; display: block; }
+.wp-story__text { font-size: var(--text-base); line-height: 1.6; color: var(--fg-soft); }
+.wp-story__text .script { color: var(--sun-soft); font-size: 1.08em; }
+.wp-story__more { align-self: stretch; align-content: center; padding: var(--space-6); border: 1px dashed var(--line-strong); border-radius: var(--radius); }
+.wp-story__more .display { color: var(--fg-soft); }
+
+/* ---- words ---- */
+.wp-words { display: grid; grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr)); gap: var(--space-3); }
+.wp-word { display: grid; gap: 2px; padding: var(--space-4); border: 1px solid var(--line); border-radius: var(--radius); background: var(--card); }
+.wp-word__native { font-size: 1.6rem; line-height: 1.3; color: var(--paper); }
+.wp-word__native.script-es { font-size: 1.35rem; }
+.wp-word__roman { font-family: var(--font-display); font-style: italic; color: var(--sun-soft); }
+.wp-word__en { font-size: var(--text-xs); letter-spacing: 0.1em; text-transform: uppercase; color: var(--fg-muted); }
+.wp-moment { display: grid; gap: var(--space-2); justify-items: center; text-align: center; margin-top: clamp(3rem, 6vw, 5rem); padding-top: clamp(2rem, 4vw, 3rem); border-top: 1px solid var(--line); }
+.wp-moment__native { font-size: clamp(2.6rem, 6vw, 4.6rem); line-height: 1.25; color: var(--paper); }
+.wp-moment__roman { font-family: var(--font-display); font-style: italic; font-size: var(--text-lg); color: var(--sun-soft); }
+.wp-moment__context { max-width: 36em; color: var(--fg-soft); }
+
+/* ---- chapters ---- */
+.wp-chapters { display: grid; gap: 0; border-top: 1px solid var(--line); counter-reset: none; }
+.wp-chapter { display: grid; grid-template-columns: 3.5rem minmax(0, 1fr) auto; gap: var(--space-4); align-items: baseline; padding: var(--space-4) 0; border-bottom: 1px solid var(--line); }
+.wp-chapter__n { font-family: var(--font-display); font-size: var(--text-xl); color: var(--fg-muted); }
+.wp-chapter.is-live .wp-chapter__n { color: var(--sun); }
+.wp-chapter__name { font-family: var(--font-display); font-size: var(--text-lg); line-height: 1.2; }
+.wp-chapter__native { color: var(--sun-soft); margin-left: 0.4em; font-size: 0.9em; }
+.wp-chapter__sub { font-size: var(--text-sm); color: var(--fg-muted); margin-top: 2px; }
+.wp-chapter__status { font-size: 0.64rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--fg-muted); white-space: nowrap; }
+.wp-chapter.is-live .wp-chapter__status { color: var(--sun); }
+.wp-future { display: grid; gap: var(--space-3); margin-top: clamp(2.5rem, 5vw, 4rem); max-width: 44rem; }
+.wp-future ul { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.wp-future li { padding: 0.45em 0.9em; border: 1px solid var(--line-strong); border-radius: 100px; font-size: var(--text-sm); color: var(--fg-soft); }
+
+/* ---- other worlds ---- */
+.wp-others { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-4); margin-top: var(--space-6); }
+.wp-other { display: grid; gap: var(--space-1); color: var(--fg); }
+.wp-other__art { aspect-ratio: 16 / 10; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); margin-bottom: var(--space-2); }
+.wp-other__art > svg { width: 100%; height: 100%; transition: transform 1s var(--ease-out); }
+.wp-other:hover .wp-other__art > svg { transform: scale(1.05); }
+.wp-other__native { font-size: 1.4rem; line-height: 1.3; color: var(--earth); }
+.wp-other__name { font-size: var(--text-sm); color: var(--fg-soft); }
+
+@media (max-width: 900px) {
+  .wp-story { grid-template-columns: 1fr; }
+  .wp-others { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .wp-chapter { grid-template-columns: 2.5rem minmax(0, 1fr); }
+  .wp-chapter__status { grid-column: 2; }
+}

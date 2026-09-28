@@ -1,5 +1,4 @@
-import type { ReactNode } from "react";
-import type { SceneId } from "../state/store";
+import type { RoomDef } from "../journeys/types";
 import { Figure, Pot, Garland } from "../components/scenes/primitives";
 
 /**
@@ -14,60 +13,37 @@ import { Figure, Pot, Garland } from "../components/scenes/primitives";
 export const FLOOR_Y = 760;
 export const STAGE_W = 1600;
 
-export type Hotspot = {
-  id: string;
-  /** x on the floor the player walks to, and the anchor for the prompt */
-  x: number;
-  /** anchor y for the prompt ring */
-  y: number;
-  label: string;
-  kind: "word" | "exit" | "npc" | "quest" | "flavor";
-  wordId?: string;
-  to?: SceneId;
-  /** flavour text shown once when interacted with (non-word objects) */
-  note?: string;
-};
-
-export type RoomDef = {
-  id: SceneId;
-  name: string;
-  telugu: string;
-  art: ReactNode;
-  hotspots: Hotspot[];
-  /** spawn x when entering from the left / right */
-  spawn: { left: number; right: number };
-};
 
 /* ------------------------------------------------------------------ */
 /* Shared bits                                                         */
 /* ------------------------------------------------------------------ */
 
-const WALL = "#e7dcc6";
-const WALL_SHADE = "#d6c8ae";
-const FLOOR = "#8a5c3a";
-const FLOOR_DARK = "#6b4429";
-const WOOD = "#5a3a22";
-const WOOD_LIGHT = "#8c6240";
-const FRAME = "#3a2718";
+export const WALL = "#e7dcc6";
+export const WALL_SHADE = "#d6c8ae";
+export const FLOOR = "#8a5c3a";
+export const FLOOR_DARK = "#6b4429";
+export const WOOD = "#5a3a22";
+export const WOOD_LIGHT = "#8c6240";
+export const FRAME = "#3a2718";
 
-function Walls({ tint = WALL }: { tint?: string }) {
+export function Walls({ tint = WALL, floor = FLOOR, floorLine = FLOOR_DARK, shade = WALL_SHADE }: { tint?: string; floor?: string; floorLine?: string; shade?: string }) {
   return (
     <>
       <rect width="1600" height="900" fill={tint} />
       {/* soft daylight falloff */}
       <rect width="1600" height="900" fill="url(#room-light)" />
       {/* skirting + floor */}
-      <rect x="0" y={FLOOR_Y - 26} width="1600" height="26" fill={WALL_SHADE} />
-      <rect x="0" y={FLOOR_Y} width="1600" height="140" fill={FLOOR} />
+      <rect x="0" y={FLOOR_Y - 26} width="1600" height="26" fill={shade} />
+      <rect x="0" y={FLOOR_Y} width="1600" height="140" fill={floor} />
       {Array.from({ length: 11 }, (_, i) => (
-        <line key={i} x1={i * 160 + (i % 2) * 40} y1={FLOOR_Y} x2={i * 160 - 120 + (i % 2) * 40} y2="900" stroke={FLOOR_DARK} strokeWidth="2" opacity="0.4" />
+        <line key={i} x1={i * 160 + (i % 2) * 40} y1={FLOOR_Y} x2={i * 160 - 120 + (i % 2) * 40} y2="900" stroke={floorLine} strokeWidth="2" opacity="0.4" />
       ))}
-      <rect x="0" y={FLOOR_Y} width="1600" height="8" fill={FLOOR_DARK} opacity="0.6" />
+      <rect x="0" y={FLOOR_Y} width="1600" height="8" fill={floorLine} opacity="0.6" />
     </>
   );
 }
 
-function Defs() {
+export function Defs() {
   return (
     <defs>
       <linearGradient id="room-light" x1="0" y1="0" x2="1" y2="1">
@@ -87,7 +63,7 @@ function Defs() {
   );
 }
 
-function Door({ x, open = false, toran = false }: { x: number; open?: boolean; toran?: boolean }) {
+export function Door({ x, open = false, toran = false }: { x: number; open?: boolean; toran?: boolean }) {
   return (
     <g>
       <rect x={x - 8} y={FLOOR_Y - 340} width="196" height="340" fill={FRAME} />
@@ -114,7 +90,7 @@ function Door({ x, open = false, toran = false }: { x: number; open?: boolean; t
   );
 }
 
-function Window({ x, w = 300, h = 220, y = 250, tulasi = false }: { x: number; w?: number; h?: number; y?: number; tulasi?: boolean }) {
+export function Window({ x, w = 300, h = 220, y = 250, tulasi = false }: { x: number; w?: number; h?: number; y?: number; tulasi?: boolean }) {
   return (
     <g>
       <rect x={x - 12} y={y - 12} width={w + 24} height={h + 24} fill="#f4efe4" />
@@ -140,7 +116,7 @@ function Window({ x, w = 300, h = 220, y = 250, tulasi = false }: { x: number; w
   );
 }
 
-function BrassLamp({ x, y, lit = true }: { x: number; y: number; lit?: boolean }) {
+export function BrassLamp({ x, y, lit = true }: { x: number; y: number; lit?: boolean }) {
   return (
     <g>
       {lit && <circle cx={x} cy={y - 40} r="70" fill="url(#lamp-glow)" />}
@@ -152,7 +128,7 @@ function BrassLamp({ x, y, lit = true }: { x: number; y: number; lit?: boolean }
   );
 }
 
-function PhotoFrame({ x, y, w = 110, h = 130, tint = "#c8704a", figure = "stand" as "stand" | "sit", two = false }: { x: number; y: number; w?: number; h?: number; tint?: string; figure?: "stand" | "sit"; two?: boolean }) {
+export function PhotoFrame({ x, y, w = 110, h = 130, tint = "#c8704a", figure = "stand" as "stand" | "sit", two = false }: { x: number; y: number; w?: number; h?: number; tint?: string; figure?: "stand" | "sit"; two?: boolean }) {
   return (
     <g>
       <rect x={x - 6} y={y - 6} width={w + 12} height={h + 12} fill={FRAME} />
@@ -397,15 +373,15 @@ function KitchenArt() {
 /* Room registry                                                       */
 /* ------------------------------------------------------------------ */
 
-export const ROOMS: Record<SceneId, RoomDef> = {
+export const ROOMS: Record<string, RoomDef> = {
   bedroom: {
     id: "bedroom",
     name: "Your room",
-    telugu: "గది",
+    native: "గది",
     art: <BedroomArt />,
     spawn: { left: 560, right: 1380 },
     hotspots: [
-      { id: "window", x: 410, y: 470, label: "Window", kind: "word", wordId: "illu" },
+      { id: "window", x: 410, y: 470, label: "Window", kind: "word", wordId: "illu", culture: "tulasi" },
       { id: "bed", x: 280, y: 660, label: "Bed", kind: "flavor", note: "Still unmade. Amma will notice." },
       { id: "glass", x: 860, y: 540, label: "Glass of water", kind: "word", wordId: "neellu" },
       { id: "photo", x: 966, y: 520, label: "Photo", kind: "word", wordId: "photo" },
@@ -417,7 +393,7 @@ export const ROOMS: Record<SceneId, RoomDef> = {
   hallway: {
     id: "hallway",
     name: "The hallway",
-    telugu: "వరండా",
+    native: "వరండా",
     art: <HallwayArt />,
     spawn: { left: 240, right: 1300 },
     hotspots: [
@@ -425,15 +401,15 @@ export const ROOMS: Record<SceneId, RoomDef> = {
       { id: "amma-photo", x: 435, y: 370, label: "Photo of Amma", kind: "word", wordId: "amma" },
       { id: "nanna-photo", x: 615, y: 390, label: "Photo of Nanna", kind: "word", wordId: "nanna" },
       { id: "family-photo", x: 840, y: 360, label: "Family photo", kind: "word", wordId: "kutumbam" },
-      { id: "lamp", x: 600, y: 600, label: "Brass lamp", kind: "flavor", note: "Ammamma's lamp. It's lit every evening, even here." },
-      { id: "calendar", x: 1235, y: 540, label: "Telugu calendar", kind: "flavor", note: "A calendar from a temple in Guntur. The festival days are circled." },
+      { id: "lamp", x: 600, y: 600, label: "Brass lamp", kind: "flavor", note: "Ammamma's lamp. It's lit every evening, even here.", culture: "lamp" },
+      { id: "calendar", x: 1235, y: 540, label: "Telugu calendar", kind: "flavor", note: "A calendar from a temple in Guntur. The festival days are circled.", culture: "calendar" },
       { id: "living", x: 1470, y: 560, label: "Living room", kind: "exit", to: "living" },
     ],
   },
   living: {
     id: "living",
     name: "Living room",
-    telugu: "హాలు",
+    native: "హాలు",
     art: <LivingArt />,
     spawn: { left: 240, right: 1300 },
     hotspots: [
@@ -448,11 +424,11 @@ export const ROOMS: Record<SceneId, RoomDef> = {
   kitchen: {
     id: "kitchen",
     name: "Kitchen",
-    telugu: "వంటిల్లు",
+    native: "వంటిల్లు",
     art: <KitchenArt />,
     spawn: { left: 240, right: 1100 },
     hotspots: [
-      { id: "back", x: 130, y: 560, label: "Living room", kind: "exit", to: "living" },
+      { id: "back", x: 130, y: 560, label: "Living room", kind: "exit", to: "living", culture: "toran" },
       { id: "jug", x: 455, y: 470, label: "Water jug", kind: "word", wordId: "neellu" },
       { id: "rice", x: 720, y: 460, label: "Pot of rice", kind: "word", wordId: "annam" },
       { id: "milk", x: 916, y: 470, label: "Milk", kind: "word", wordId: "paalu" },

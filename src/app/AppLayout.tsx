@@ -19,7 +19,7 @@ const NAV = [
  * a slim rail on desktop, a tab bar on mobile, the world always behind it.
  */
 export function AppLayout() {
-  const { session, progress, stats, dispatch } = useGame();
+  const { session, progress, overall, dispatch } = useGame();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -51,7 +51,7 @@ export function AppLayout() {
           <span className="app__avatar" aria-hidden="true">{progress.playerName.slice(0, 1)}</span>
           <div className="app__player-meta">
             <span className="app__player-name">{progress.playerName}</span>
-            <span className="app__player-level">Level {stats.level} · {stats.connection}%</span>
+            <span className="app__player-level">Level {overall.level} · {overall.connection}%</span>
           </div>
           <button className="app__logout" onClick={logout} aria-label="Log out" title="Log out">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M10 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4M14 16l4-4-4-4M18 12H9" /></svg>

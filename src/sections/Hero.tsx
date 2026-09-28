@@ -82,7 +82,7 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.3, ease: EASE }}
         >
-          Telugu · Chapter One available now
+          Five languages · Chapter One available now
         </motion.p>
 
         <h1 className="hero__headline display display--hero">

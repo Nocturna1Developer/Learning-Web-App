@@ -1,12 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
-import type { Word } from "../../data/vocabulary";
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { GameSpec, Journey, Word } from "../../journeys/types";
+import { Native } from "../../journeys/render";
 import { sfx } from "../../lib/sfx";
 
-type Card = { key: string; wordId: string; face: "telugu" | "english"; word: Word };
+type Card = { key: string; wordId: string; face: "native" | "english"; word: Word };
 
 type Props = {
+  spec: Extract<GameSpec, { type: "memory" }>;
+  j: Journey;
   words: Word[];
-  /** 0..1 — how much English to show on the English faces (roman + meaning vs meaning only) */
+  /** 0..1 — how much English support a word still gets */
   support: (wordId: string) => number;
   onComplete: (bestCombo: number, moves: number) => void;
 };
@@ -14,21 +17,21 @@ type Props = {
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
+    const k = Math.floor(Math.random() * (i + 1));
+    [a[i], a[k]] = [a[k], a[i]];
   }
   return a;
 }
 
 /**
- * Memory Match — pairs of Telugu script ↔ meaning. Six pairs, twelve cards.
+ * Memory Match — pairs of script ↔ meaning. Six pairs, twelve cards.
  * Matching runs a combo; the combo is the reward, not a grade.
  */
-export function MemoryMatch({ words, support, onComplete }: Props) {
+export function MemoryMatch({ spec, j, words, support, onComplete }: Props) {
   const cards = useMemo<Card[]>(() => {
     const picked = words.slice(0, 6);
     return shuffle(picked.flatMap((w) => [
-      { key: `${w.id}-t`, wordId: w.id, face: "telugu" as const, word: w },
+      { key: `${w.id}-n`, wordId: w.id, face: "native" as const, word: w },
       { key: `${w.id}-e`, wordId: w.id, face: "english" as const, word: w },
     ]));
   }, [words]);
@@ -42,12 +45,14 @@ export function MemoryMatch({ words, support, onComplete }: Props) {
   const [lock, setLock] = useState(false);
   const done = matched.size === cards.length;
 
+  const finish = useRef(() => onComplete(best, moves));
+  finish.current = () => onComplete(best, moves);
   useEffect(() => {
     if (!done) return;
     sfx.fanfare();
-    const t = setTimeout(() => onComplete(best, moves), 1400);
+    const t = setTimeout(() => finish.current(), 1400);
     return () => clearTimeout(t);
-  }, [done, best, moves, onComplete]);
+  }, [done]);
 
   const flip = (card: Card) => {
     if (lock || matched.has(card.key) || up.includes(card.key)) return;
@@ -81,9 +86,9 @@ export function MemoryMatch({ words, support, onComplete }: Props) {
       <div className="mg__panel">
         <div className="mg__head">
           <div>
-            <p className="mg__k">Mini-game · Amma&rsquo;s memory game</p>
-            <h2 className="mg__title" id="mm-title">Match the word to what it means.</h2>
-            <p className="mg__hint">Turn two cards. A Telugu word and its meaning belong together. Matches in a row build a combo.</p>
+            <p className="mg__k">{spec.kicker}</p>
+            <h2 className="mg__title" id="mm-title">{spec.title}</h2>
+            <p className="mg__hint">{spec.hint}</p>
           </div>
           <div className="mg__score">
             <span>Moves <strong>{moves}</strong></span>
@@ -101,18 +106,18 @@ export function MemoryMatch({ words, support, onComplete }: Props) {
                 key={c.key}
                 className={`mcard ${isUp ? "is-up" : ""} ${matched.has(c.key) ? "is-matched" : ""} ${wrong.includes(c.key) ? "is-wrong" : ""}`}
                 onClick={() => flip(c)}
-                aria-label={isUp ? (c.face === "telugu" ? c.word.roman : c.word.english) : "Face-down card"}
+                aria-label={isUp ? (c.face === "native" ? c.word.roman : c.word.english) : "Face-down card"}
                 aria-pressed={isUp}
               >
                 <div className="mcard__inner">
                   <div className="mcard__face mcard__back" />
-                  <div className={`mcard__face mcard__front ${c.face === "telugu" ? "mcard__front--telugu" : "mcard__front--english"}`}>
-                    {c.face === "telugu" ? (
-                      <span>{c.word.telugu}</span>
+                  <div className={`mcard__face mcard__front ${c.face === "native" ? "mcard__front--native" : "mcard__front--english"}`}>
+                    {c.face === "native" ? (
+                      <Native j={j}>{c.word.native}</Native>
                     ) : (
                       <span>
-                        {c.word.english.split(" · ")[0]}
-                        {s > 0.4 && <small>{c.word.roman}</small>}
+                        {c.word.english.split(" · ")[0].split(" (")[0]}
+                        {j.romanize && s > 0.4 && <small>{c.word.roman}</small>}
                       </span>
                     )}
                   </div>
@@ -123,7 +128,7 @@ export function MemoryMatch({ words, support, onComplete }: Props) {
         </div>
 
         <div className="mg__foot">
-          <p className="mg__hint">{done ? "All matched. Amma is impressed." : `${matched.size / 2} of ${cards.length / 2} pairs`}</p>
+          <p className="mg__hint">{done ? "All matched." : `${matched.size / 2} of ${cards.length / 2} pairs`}</p>
         </div>
       </div>
     </div>

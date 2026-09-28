@@ -9,6 +9,7 @@ import "./LanguagesPage.css";
 export function LanguagesPage() {
   const { session } = useGame();
   const playTo = session.user ? "/app/play" : "/subscribe";
+  const worldTo = (id: string) => `/languages/${id}`;
 
   return (
     <>
@@ -33,7 +34,7 @@ export function LanguagesPage() {
 
         <section className="surface section grain" data-surface="dark" style={{ paddingTop: 0 }}>
           <div className="container">
-            <LanguageGrid playTo={playTo} variant="full" />
+            <LanguageGrid hrefFor={worldTo} cta="Explore this world" variant="full" />
           </div>
         </section>
 
@@ -47,8 +48,8 @@ export function LanguagesPage() {
               {[
                 { k: "Same platform", v: "Exploration, quests, contextual vocabulary, mini-games and the Heritage Journal are shared by every world." },
                 { k: "Different worlds", v: "Characters, homes, architecture, clothing, food, music, folklore and festivals are built for each culture, not translated from one." },
-                { k: "Room for difference", v: "Spanish will hold Mexican and Mexican-American journeys alongside other Spanish-speaking family stories. Chinese, Hindi and Arabic are built to carry regional experiences, not one flattened picture." },
-                { k: "Telugu first", v: "We'd rather build one world properly than five approximately. Chapter One of the Telugu journey is playable today; the rest are in development." },
+                { k: "Room for difference", v: "Spanish starts with one Mexican-American family and is built to hold other Spanish-speaking family stories beside it. Chinese, Hindi and Arabic are built for regional worlds, not one flattened picture — the first Arabic journey is Levantine on purpose." },
+                { k: "Five first chapters", v: "Each was written for its own family — a Telugu home, a Mexican-American ofrenda, a Mandarin New Year's Eve, a grandmother's visit from Lucknow, a Levantine Sunday lunch. Every Chapter One is playable today; the chapters after them are being built." },
               ].map((p, i) => (
                 <Reveal key={p.k} delay={i * 0.07} className="langs-principle__item">
                   <p className="langs-principle__k">{p.k}</p>
@@ -59,7 +60,7 @@ export function LanguagesPage() {
             <Reveal delay={0.2}>
               <div className="btn-row langs-principle__cta">
                 <Link to={playTo} className="btn">
-                  <span className="btn__label">{session.user ? "Play Telugu now" : "Start with Telugu"}</span>
+                  <span className="btn__label">{session.user ? "Choose a journey" : "Start your journey"}</span>
                 </Link>
                 <Link to="/#game" className="btn btn--ghost"><span className="btn__label">See the game</span></Link>
               </div>

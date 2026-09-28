@@ -1,25 +1,28 @@
 /**
- * Speaks Telugu through the browser's own voices when one is installed;
- * silently does nothing otherwise. A nice-to-have, never a dependency.
+ * Speaks a phrase through the browser's own voices when one is installed for
+ * that language; silently does nothing otherwise. A nice-to-have, never a
+ * dependency.
  */
 
-let voice: SpeechSynthesisVoice | null | undefined;
+const cache = new Map<string, SpeechSynthesisVoice | null>();
 
-function pickVoice(): SpeechSynthesisVoice | null {
-  if (voice !== undefined) return voice;
-  if (typeof speechSynthesis === "undefined") return (voice = null);
+function pickVoice(lang: string): SpeechSynthesisVoice | null {
+  if (typeof speechSynthesis === "undefined") return null;
+  if (cache.has(lang)) return cache.get(lang)!;
   const voices = speechSynthesis.getVoices();
-  voice = voices.find((v) => v.lang.toLowerCase().startsWith("te")) ?? null;
-  return voice;
+  if (!voices.length) return null; // not loaded yet — don't cache the miss
+  const v = voices.find((x) => x.lang.toLowerCase().startsWith(lang.toLowerCase())) ?? null;
+  cache.set(lang, v);
+  return v;
 }
 
 if (typeof speechSynthesis !== "undefined") {
-  speechSynthesis.addEventListener?.("voiceschanged", () => { voice = undefined; });
+  speechSynthesis.addEventListener?.("voiceschanged", () => cache.clear());
 }
 
-export function speakTelugu(text: string) {
+export function speak(text: string, lang: string) {
   try {
-    const v = pickVoice();
+    const v = pickVoice(lang);
     if (!v) return false;
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
@@ -31,8 +34,4 @@ export function speakTelugu(text: string) {
   } catch {
     return false;
   }
-}
-
-export function canSpeakTelugu() {
-  return !!pickVoice();
 }

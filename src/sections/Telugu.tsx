@@ -19,14 +19,14 @@ export function Telugu() {
               <span className="telugu-hero__roman">Telugu</span>
             </Reveal>
             <div className="telugu-hero__copy">
-              <Reveal><span className="eyebrow">Launch culture</span></Reveal>
-              <RevealLines className="display display--xl" lines={["Our first journey", <>begins with <em>Telugu</em>.</>]} />
+              <Reveal><span className="eyebrow">Where ROOTS began</span></Reveal>
+              <RevealLines className="display display--xl" lines={["Our first journey", <>began with <em>Telugu</em>.</>]} />
               <Reveal delay={0.15}>
                 <p className="lede">
-                  For the first ROOTS adventure we&rsquo;re focusing on Telugu — giving children a playful
-                  way to hear, understand and use the language while exploring the culture behind it.
-                  Telugu isn&rsquo;t the first entry on a language list. It is the foundation of the
-                  playable ROOTS experience, built with Telugu families, writers and artists.
+                  ROOTS started with Telugu — a playful way for children to hear, understand and use the
+                  language while exploring the culture behind it. Telugu was never just the first entry on
+                  a language list: it set the standard every other world is built to, from the family in
+                  the house to the words on the shelf.
                 </p>
               </Reveal>
             </div>

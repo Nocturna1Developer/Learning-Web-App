@@ -11,12 +11,13 @@ import { WorldPage } from "./app/WorldPage";
 import { JournalPage } from "./app/JournalPage";
 import { AppLanguages } from "./app/AppLanguages";
 import { Profile } from "./app/Profile";
+import { LanguageWorld } from "./pages/LanguageWorld";
 
-// The game is its own chunk — visitors to the marketing site never download it.
-const ChapterOneLazy = lazy(() => import("./game/ChapterOne").then((m) => ({ default: m.ChapterOne })));
-const ChapterOne = () => (
+// The game engine is its own chunk — visitors to the marketing site never download it.
+const PlayerLazy = lazy(() => import("./game/Player").then((m) => ({ default: m.JourneyPlayer })));
+const JourneyPlayer = () => (
   <Suspense fallback={<div style={{ position: "fixed", inset: 0, background: "#0f0e0b" }} />}>
-    <ChapterOneLazy />
+    <PlayerLazy />
   </Suspense>
 );
 
@@ -44,13 +45,15 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/languages" element={<LanguagesPage />} />
+        <Route path="/languages/:id" element={<LanguageWorld />} />
         <Route path="/subscribe" element={<Subscribe />} />
         <Route path="/login" element={<Login />} />
 
         <Route path="/app" element={<AppLayout />}>
           <Route index element={<AppHome />} />
           <Route path="play" element={<Play />} />
-          <Route path="play/chapter-one" element={<ChapterOne />} />
+          <Route path="play/chapter-one" element={<Navigate to="/app/play/telugu" replace />} />
+          <Route path="play/:lang" element={<JourneyPlayer />} />
           <Route path="world" element={<WorldPage />} />
           <Route path="journal" element={<JournalPage />} />
           <Route path="languages" element={<AppLanguages />} />

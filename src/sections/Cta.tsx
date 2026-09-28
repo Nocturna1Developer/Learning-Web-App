@@ -43,8 +43,8 @@ export function Cta() {
 
         <Reveal delay={0.2}>
           <p className="lede cta__lede">
-            Begin the first ROOTS journey with Telugu. Learn the language. Discover the culture.
-            Hear the stories — and bring what you discover back home.
+            Begin in Telugu, Spanish, Mandarin, Hindi or Levantine Arabic. Learn the language. Discover
+            the culture. Hear the stories — and bring what you discover back home.
           </p>
         </Reveal>
 

@@ -155,7 +155,7 @@
   white-space: nowrap;
   transition: background 0.3s, color 0.3s, border-color 0.3s;
 }
-.hud__chip .telugu { letter-spacing: 0; text-transform: none; font-size: 1.15em; color: var(--sun-soft); }
+.hud__chip .script { letter-spacing: 0; text-transform: none; font-size: 1.15em; color: var(--sun-soft); }
 button.hud__chip { cursor: pointer; }
 button.hud__chip:hover { background: rgba(15,14,11,0.85); border-color: rgba(244,236,221,0.3); color: var(--paper); }
 .hud__chip svg { width: 14px; height: 14px; }
@@ -223,7 +223,8 @@ button.hud__chip:hover { background: rgba(15,14,11,0.85); border-color: rgba(244
 @keyframes popIn { from { opacity: 0; transform: translate(-50%, -10px) scale(0.97); } }
 .wordpop--out { animation: popOut 0.4s var(--ease-in-out) forwards; }
 @keyframes popOut { to { opacity: 0; transform: translate(-50%, -6px); } }
-.wordpop__telugu { font-family: var(--font-telugu); font-size: clamp(2rem, 4.2vw, 3.6rem); line-height: 1.25; color: var(--paper); }
+.wordpop__native { font-size: clamp(2rem, 4.2vw, 3.6rem); line-height: 1.25; color: var(--paper); }
+.wordpop__native.script-es { font-size: clamp(1.8rem, 3.6vw, 3rem); }
 .wordpop__roman { font-family: var(--font-display); font-style: italic; font-size: clamp(0.95rem, 1.5vw, 1.3rem); color: var(--sun-soft); transition: opacity 0.6s; }
 .wordpop__english { font-size: clamp(0.6rem, 0.9vw, 0.78rem); letter-spacing: 0.2em; text-transform: uppercase; color: rgba(244,236,221,0.6); margin-top: 0.4em; transition: opacity 0.6s; }
 .wordpop__new { font-size: clamp(0.52rem, 0.75vw, 0.64rem); font-weight: 700; letter-spacing: 0.24em; text-transform: uppercase; color: var(--dark); background: var(--sun); padding: 0.3em 0.7em; border-radius: 100px; margin-bottom: 0.4em; }
@@ -268,7 +269,8 @@ button.hud__chip:hover { background: rgba(15,14,11,0.85); border-color: rgba(244
 .dialogue__body { display: grid; gap: 0.35em; min-width: 0; }
 .dialogue__who { font-size: clamp(0.55rem, 0.8vw, 0.68rem); font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--sun); }
 .dialogue__text { font-size: clamp(0.95rem, 1.5vw, 1.25rem); line-height: 1.45; color: var(--paper); }
-.dialogue__text .telugu { font-size: 1.12em; color: var(--sun-soft); }
+.dialogue__text .script { font-size: 1.12em; color: var(--sun-soft); }
+.dialogue__gloss .script { color: rgba(240,207,122,0.75); font-style: normal; }
 .dialogue__gloss { font-size: clamp(0.72rem, 1vw, 0.86rem); font-style: italic; color: rgba(244,236,221,0.55); transition: opacity 0.6s; }
 .dialogue__next { justify-self: end; font-size: clamp(0.55rem, 0.8vw, 0.66rem); letter-spacing: 0.18em; text-transform: uppercase; color: rgba(244,236,221,0.5); margin-top: 0.3em; animation: nudge 1.6s ease-in-out infinite; }
 @keyframes nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(3px); } }
@@ -282,7 +284,8 @@ button.hud__chip:hover { background: rgba(15,14,11,0.85); border-color: rgba(244
   background: rgba(244,236,221,0.04);
   transition: border-color 0.3s, background 0.3s, transform 0.4s var(--ease-out);
 }
-.dialogue__choice .telugu { color: var(--sun-soft); margin-right: 0.4em; }
+.dialogue__choice .script { color: var(--sun-soft); font-size: 1.1em; }
+.choice__roman { display: block; font-size: 0.72em; letter-spacing: 0.04em; color: rgba(244,236,221,0.55); margin-top: 0.15em; }
 .dialogue__choice:hover { border-color: var(--sun); background: rgba(217,164,65,0.1); transform: translateY(-2px); }
 
 /* ---- toast ---- */
@@ -400,7 +403,8 @@ button.hud__chip:hover { background: rgba(15,14,11,0.85); border-color: rgba(244
   color: var(--ink);
   border: 1px solid rgba(27,24,18,0.1);
 }
-.mcard__front--telugu { font-family: var(--font-telugu); font-size: clamp(1.3rem, 2.6vw, 2.2rem); line-height: 1.2; }
+.mcard__front--native { font-size: clamp(1.3rem, 2.6vw, 2.2rem); line-height: 1.2; }
+.mcard__front--native .script-es { font-size: 0.8em; }
 .mcard__front--english { font-family: var(--font-display); font-size: clamp(0.95rem, 1.6vw, 1.35rem); line-height: 1.15; }
 .mcard__front small { display: block; font-family: var(--font-body); font-size: 0.55em; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-muted); margin-top: 0.4em; }
 .mcard.is-matched .mcard__front { background: #f0e4c4; border-color: var(--sun); box-shadow: 0 0 0 2px var(--sun) inset; animation: matched 0.5s var(--ease-out); }
@@ -440,7 +444,7 @@ button.hud__chip:hover { background: rgba(15,14,11,0.85); border-color: rgba(244
 .slot.is-wrong { animation: shake 0.4s ease-in-out; border-color: #c8503f; }
 .slot__photo { width: 100%; aspect-ratio: 4 / 3; background: #d8c9a8; display: grid; place-items: end center; overflow: hidden; border-radius: 2px; }
 .slot__photo svg { width: 70%; height: auto; }
-.slot__telugu { font-family: var(--font-telugu); font-size: clamp(1rem, 1.8vw, 1.5rem); line-height: 1.2; }
+.slot__native { font-size: clamp(1rem, 1.8vw, 1.5rem); line-height: 1.2; }
 .slot__roman { font-family: var(--font-display); font-style: italic; font-size: clamp(0.72rem, 1vw, 0.9rem); color: var(--ink-soft); }
 .slot__english { font-size: clamp(0.55rem, 0.8vw, 0.68rem); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-muted); transition: opacity 0.5s; }
 .album__tray { display: grid; gap: clamp(0.5rem, 1vw, 0.8rem); align-content: start; }
@@ -480,7 +484,7 @@ button.hud__chip:hover { background: rgba(15,14,11,0.85); border-color: rgba(244
   border-radius: var(--radius);
 }
 .kq__ask-text { display: grid; gap: 0.2em; }
-.kq__telugu { font-family: var(--font-telugu); font-size: clamp(1.4rem, 2.6vw, 2.2rem); line-height: 1.25; }
+.kq__native { font-size: clamp(1.4rem, 2.6vw, 2.2rem); line-height: 1.25; }
 .kq__roman { font-family: var(--font-display); font-style: italic; color: var(--sun-soft); font-size: clamp(0.9rem, 1.3vw, 1.1rem); }
 .kq__gloss { font-size: clamp(0.65rem, 0.9vw, 0.78rem); letter-spacing: 0.16em; text-transform: uppercase; color: rgba(244,236,221,0.5); transition: opacity 0.5s; }
 .kq__items { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(0.6rem, 1.2vw, 1rem); }
@@ -578,4 +582,87 @@ button.hud__chip:hover { background: rgba(15,14,11,0.85); border-color: rgba(244
 @media (max-width: 520px) {
   .mcards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .dialogue { width: 96%; }
+}
+
+
+/* =====================================================================
+   Multi-language additions
+   ===================================================================== */
+
+/* speaker tones */
+.dialogue__portrait--elder { background: linear-gradient(145deg, #c8704a, #9a4a2a); }
+.dialogue__portrait--parent { background: linear-gradient(145deg, #3f7d55, #1f4d33); }
+.dialogue__portrait--guest { background: linear-gradient(145deg, #7a3a8a, #4a2458); }
+
+/* a hint the player has to ask for */
+.dialogue__hint, .story__hint {
+  justify-self: start;
+  font-size: clamp(0.62rem, 0.9vw, 0.74rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(244,236,221,0.5);
+  border-bottom: 1px dashed rgba(244,236,221,0.3);
+  padding-bottom: 1px;
+  transition: color 0.3s;
+}
+.dialogue__hint:hover, .story__hint:hover { color: var(--sun-soft); }
+.dialogue__hint.is-open, .story__hint.is-open {
+  text-transform: none; letter-spacing: 0.02em; font-style: italic;
+  border-bottom-color: transparent; color: rgba(244,236,221,0.7);
+  font-size: clamp(0.72rem, 1vw, 0.86rem);
+}
+
+.cinematic__family { font-size: var(--text-xs); letter-spacing: 0.18em; text-transform: uppercase; color: rgba(244,236,221,0.5); }
+.complete__next { font-size: var(--text-xs); letter-spacing: 0.1em; text-transform: uppercase; color: rgba(244,236,221,0.4); }
+
+/* place-game boards per culture */
+.album__book--altar { background: linear-gradient(170deg, #f7f1e6, #e9dcc2); }
+.album__book--altar::before { background: rgba(154,74,42,0.25); }
+.album__book--altar .slot { background: #fffdf8; box-shadow: 0 2px 0 rgba(0,0,0,0.05); }
+.album__book--table { background: radial-gradient(ellipse at center, #b33a2a 0%, #8e2418 100%); border-radius: 50% / 24%; padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 4vw, 3rem); }
+.album__book--table::before { display: none; }
+
+/* ---- story time ---- */
+/* overflow-x: the pages slide in sideways; don't flash a horizontal scrollbar while they do */
+.story { max-width: 58rem; overflow-x: hidden; }
+.story__native { display: block; font-size: clamp(1rem, 1.6vw, 1.3rem); color: var(--sun-soft); margin-top: 0.2em; }
+.story__dots { display: flex; gap: 6px; align-items: center; }
+.story__dots span { width: 22px; height: 4px; border-radius: 2px; background: rgba(244,236,221,0.14); transition: background 0.4s; }
+.story__dots span.is-on { background: var(--sun); }
+.story__dots .story__dot-q { width: auto; height: auto; background: none; font-size: 0.72rem; font-weight: 700; color: rgba(244,236,221,0.3); padding-left: 4px; }
+.story__dots .story__dot-q.is-on { background: none; color: var(--sun); }
+.story__page { display: grid; gap: clamp(0.8rem, 1.6vw, 1.2rem); }
+/* Height is capped by the viewport so the text and Next button stay on screen on a laptop.
+   The panel keeps its drawn 5:3 proportions and gets narrower instead of cropping. */
+.story__art {
+  height: clamp(10rem, 40vh, 30rem);
+  aspect-ratio: 400 / 240;
+  width: auto;
+  max-width: 100%;
+  justify-self: center;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid rgba(244,236,221,0.1);
+  background: #17110c;
+}
+.story__art svg { width: 100%; height: 100%; display: block; }
+.story__text { display: grid; grid-template-columns: auto 1fr; gap: 1em; align-items: start; }
+.story__text p { font-size: clamp(0.98rem, 1.5vw, 1.2rem); line-height: 1.55; color: var(--paper); text-wrap: pretty; }
+.story__text .script { color: var(--sun-soft); font-size: 1.1em; }
+.story__nav { display: flex; justify-content: space-between; gap: var(--space-3); }
+.story__nav .btn:disabled { opacity: 0.35; cursor: default; }
+.story__question { display: grid; gap: var(--space-3); justify-items: start; padding-block: var(--space-4); }
+.story__ask { font-size: clamp(2rem, 4.5vw, 3.4rem); line-height: 1.25; color: var(--paper); }
+.story__roman { font-family: var(--font-display); font-style: italic; font-size: clamp(1rem, 1.5vw, 1.25rem); color: var(--sun-soft); }
+.story__choices { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-2); }
+.story__choices .dialogue__choice { padding: 0.75em 1.2em; text-align: left; }
+.dialogue__choice.is-right { border-color: var(--sun); background: rgba(217,164,65,0.18); }
+.story__reply { min-height: 2.5em; display: grid; gap: 0.3em; font-size: clamp(0.85rem, 1.2vw, 1rem); color: rgba(244,236,221,0.8); }
+.story__reply em { color: rgba(244,236,221,0.5); }
+.story__reply .script { color: var(--sun-soft); }
+.story__solved { color: var(--sun); font-weight: 700; letter-spacing: 0.08em; }
+
+@media (max-width: 720px) {
+  .story__text { grid-template-columns: 1fr; }
+  .story__text .dialogue__portrait { display: none; }
 }

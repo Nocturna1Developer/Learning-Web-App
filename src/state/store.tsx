@@ -1,76 +1,79 @@
 import { createContext, useContext, useEffect, useMemo, useReducer, type ReactNode } from "react";
-import { VOCAB } from "../data/vocabulary";
+import { JOURNEYS, JOURNEY_ORDER } from "../journeys";
+import type { Journey } from "../journeys/types";
 
 /* ------------------------------------------------------------------ */
 /* Types                                                               */
 /* ------------------------------------------------------------------ */
 
 export type Plan = "monthly" | "yearly";
-export type SceneId = "bedroom" | "hallway" | "living" | "kitchen";
 
 export type Session = {
   user: string | null;
   plan: Plan | null;
 };
 
-export type Progress = {
-  playerName: string;
-  /** word id -> number of times encountered in the world */
+/** Progress through one language's Chapter One. */
+export type JourneyProgress = {
+  /** word id -> number of times encountered */
   encounters: Record<string, number>;
-  scene: SceneId;
-  /** story flags, in the order the chapter reaches them */
-  flags: {
-    intro: boolean;
-    albumFound: boolean;
-    albumDone: boolean;
-    memoryDone: boolean;
-    kitchenDone: boolean;
-    chapterComplete: boolean;
-  };
+  scene: string;
+  /** completed story beats, plus "intro" and "complete" */
+  done: string[];
   culture: string[];
   memories: string[];
   bestCombo: number;
 };
 
+export type Progress = {
+  playerName: string;
+  /** the journey the dashboard is showing */
+  active: string;
+  journeys: Record<string, JourneyProgress>;
+};
+
 type State = { session: Session; progress: Progress };
 
+type J = { j: string };
 type Action =
   | { type: "login"; user: string }
   | { type: "logout" }
   | { type: "subscribe"; plan: Plan }
-  | { type: "encounter"; wordId: string }
-  | { type: "scene"; scene: SceneId }
-  | { type: "flag"; flag: keyof Progress["flags"] }
-  | { type: "culture"; item: string }
-  | { type: "memory"; item: string }
-  | { type: "combo"; combo: number }
-  | { type: "restartChapter" }
-  | { type: "rename"; name: string };
+  | { type: "rename"; name: string }
+  | ({ type: "activate" } & J)
+  | ({ type: "encounter"; wordId: string } & J)
+  | ({ type: "scene"; scene: string } & J)
+  | ({ type: "done"; beat: string } & J)
+  | ({ type: "culture"; item: string } & J)
+  | ({ type: "memory"; item: string } & J)
+  | ({ type: "combo"; combo: number } & J)
+  | ({ type: "restart" } & J);
 
 /* ------------------------------------------------------------------ */
 /* Defaults + persistence                                              */
 /* ------------------------------------------------------------------ */
 
 const SESSION_KEY = "roots.session.v1";
-const PROGRESS_KEY = "roots.progress.v1";
+const PROGRESS_KEY = "roots.progress.v2";
+const LEGACY_PROGRESS_KEY = "roots.progress.v1";
 
-const freshProgress = (): Progress => ({
-  playerName: "Maya",
+export const freshJourney = (j: string): JourneyProgress => ({
   encounters: {},
-  scene: "bedroom",
-  flags: { intro: false, albumFound: false, albumDone: false, memoryDone: false, kitchenDone: false, chapterComplete: false },
+  scene: JOURNEYS[j]?.startRoom ?? "",
+  done: [],
   culture: [],
   memories: [],
   bestCombo: 0,
 });
 
-function load<T>(key: string, fallback: T): T {
+const freshProgress = (): Progress => ({ playerName: "Maya", active: "telugu", journeys: {} });
+
+function read<T>(key: string): T | null {
   try {
     const raw = localStorage.getItem(key);
-    if (!raw) return fallback;
-    return { ...fallback, ...(JSON.parse(raw) as Partial<T>) };
+    return raw ? (JSON.parse(raw) as T) : null;
   } catch {
-    return fallback;
+    return null;
   }
 }
 
@@ -82,35 +85,85 @@ function save(key: string, value: unknown) {
   }
 }
 
+/** Saves from before there was more than one language. */
+type LegacyProgress = {
+  playerName?: string;
+  encounters?: Record<string, number>;
+  scene?: string;
+  flags?: Record<string, boolean>;
+  culture?: string[];
+  memories?: string[];
+  bestCombo?: number;
+};
+
+function migrate(old: LegacyProgress): Progress {
+  const f = old.flags ?? {};
+  const map: [string, string][] = [["intro", "intro"], ["albumDone", "album"], ["memoryDone", "memory"], ["kitchenDone", "kitchen"], ["chapterComplete", "complete"]];
+  return {
+    playerName: old.playerName ?? "Maya",
+    active: "telugu",
+    journeys: {
+      telugu: {
+        encounters: old.encounters ?? {},
+        scene: old.scene ?? "bedroom",
+        done: map.filter(([k]) => f[k]).map(([, v]) => v),
+        culture: old.culture ?? [],
+        memories: old.memories ?? [],
+        bestCombo: old.bestCombo ?? 0,
+      },
+    },
+  };
+}
+
+function loadProgress(): Progress {
+  const current = read<Progress>(PROGRESS_KEY);
+  if (current?.journeys) return { ...freshProgress(), ...current };
+  const legacy = read<LegacyProgress>(LEGACY_PROGRESS_KEY);
+  if (legacy?.flags) return migrate(legacy);
+  return freshProgress();
+}
+
+function loadSession(): Session {
+  return { user: null, plan: null, ...(read<Session>(SESSION_KEY) ?? {}) };
+}
+
 /* ------------------------------------------------------------------ */
 /* Reducer                                                             */
 /* ------------------------------------------------------------------ */
 
-function reducer(state: State, action: Action): State {
-  const p = state.progress;
-  switch (action.type) {
+function withJourney(state: State, j: string, fn: (jp: JourneyProgress) => JourneyProgress): State {
+  const jp = state.progress.journeys[j] ?? freshJourney(j);
+  return { ...state, progress: { ...state.progress, journeys: { ...state.progress.journeys, [j]: fn(jp) } } };
+}
+
+const addOnce = (arr: string[], item: string) => (arr.includes(item) ? arr : [...arr, item]);
+
+function reducer(state: State, a: Action): State {
+  switch (a.type) {
     case "login":
-      return { ...state, session: { ...state.session, user: action.user } };
+      return { ...state, session: { ...state.session, user: a.user } };
     case "logout":
       return { ...state, session: { ...state.session, user: null } };
     case "subscribe":
-      return { ...state, session: { ...state.session, plan: action.plan } };
-    case "encounter":
-      return { ...state, progress: { ...p, encounters: { ...p.encounters, [action.wordId]: (p.encounters[action.wordId] ?? 0) + 1 } } };
-    case "scene":
-      return { ...state, progress: { ...p, scene: action.scene } };
-    case "flag":
-      return { ...state, progress: { ...p, flags: { ...p.flags, [action.flag]: true } } };
-    case "culture":
-      return p.culture.includes(action.item) ? state : { ...state, progress: { ...p, culture: [...p.culture, action.item] } };
-    case "memory":
-      return p.memories.includes(action.item) ? state : { ...state, progress: { ...p, memories: [...p.memories, action.item] } };
-    case "combo":
-      return { ...state, progress: { ...p, bestCombo: Math.max(p.bestCombo, action.combo) } };
-    case "restartChapter":
-      return { ...state, progress: { ...freshProgress(), playerName: p.playerName } };
+      return { ...state, session: { ...state.session, plan: a.plan } };
     case "rename":
-      return { ...state, progress: { ...p, playerName: action.name } };
+      return { ...state, progress: { ...state.progress, playerName: a.name } };
+    case "activate":
+      return state.progress.active === a.j ? state : { ...state, progress: { ...state.progress, active: a.j } };
+    case "encounter":
+      return withJourney(state, a.j, (jp) => ({ ...jp, encounters: { ...jp.encounters, [a.wordId]: (jp.encounters[a.wordId] ?? 0) + 1 } }));
+    case "scene":
+      return withJourney(state, a.j, (jp) => ({ ...jp, scene: a.scene }));
+    case "done":
+      return withJourney(state, a.j, (jp) => ({ ...jp, done: addOnce(jp.done, a.beat) }));
+    case "culture":
+      return withJourney(state, a.j, (jp) => ({ ...jp, culture: addOnce(jp.culture, a.item) }));
+    case "memory":
+      return withJourney(state, a.j, (jp) => ({ ...jp, memories: addOnce(jp.memories, a.item) }));
+    case "combo":
+      return withJourney(state, a.j, (jp) => ({ ...jp, bestCombo: Math.max(jp.bestCombo, a.combo) }));
+    case "restart":
+      return withJourney(state, a.j, () => freshJourney(a.j));
     default:
       return state;
   }
@@ -128,15 +181,40 @@ export function supportFor(encounters: number): number {
   return 0;
 }
 
-export function deriveStats(p: Progress) {
-  const discovered = Object.keys(p.encounters).filter((id) => VOCAB.some((w) => w.id === id));
-  const family = discovered.filter((id) => VOCAB.find((w) => w.id === id)?.group === "family");
-  const f = p.flags;
-  const milestones = [f.intro, f.albumFound, f.albumDone, f.memoryDone, f.kitchenDone, f.chapterComplete];
-  const chapterPct = Math.round((milestones.filter(Boolean).length / milestones.length) * 100);
-  const level = 1 + Math.floor(discovered.length / 4);
-  const connection = Math.min(100, Math.round(discovered.length * 6 + p.culture.length * 8 + p.memories.length * 12 + (f.chapterComplete ? 10 : 0)));
-  return { discovered, family, chapterPct, level, connection, journalUnlocked: f.chapterComplete || f.albumDone };
+export function journeyStats(journey: Journey, jp: JourneyProgress | undefined) {
+  const p = jp ?? freshJourney(journey.id);
+  const done = new Set(p.done);
+  const discovered = journey.words.filter((w) => p.encounters[w.id]).map((w) => w.id);
+  const family = journey.words.filter((w) => w.group === "family" && p.encounters[w.id]).map((w) => w.id);
+  const steps = ["intro", ...journey.chapter.beats.map((b) => b.id), "complete"];
+  const pct = Math.round((steps.filter((s) => done.has(s)).length / steps.length) * 100);
+  return {
+    discovered,
+    family,
+    pct,
+    started: done.has("intro"),
+    complete: done.has("complete"),
+    journalUnlocked: done.has("complete") || discovered.length > 0,
+  };
+}
+
+export function overallStats(progress: Progress) {
+  let words = 0;
+  let culture = 0;
+  let memories = 0;
+  let completes = 0;
+  for (const id of JOURNEY_ORDER) {
+    const jp = progress.journeys[id];
+    if (!jp) continue;
+    words += JOURNEYS[id].words.filter((w) => jp.encounters[w.id]).length;
+    culture += jp.culture.length;
+    memories += jp.memories.length;
+    if (jp.done.includes("complete")) completes += 1;
+  }
+  const level = 1 + Math.floor(words / 4);
+  // One chapter's worth of discovery is roughly 100%; beyond that, connection stays full.
+  const connection = Math.min(100, Math.round(words * 6 + culture * 8 + memories * 12 + completes * 10));
+  return { words, culture, memories, completes, level, connection };
 }
 
 /* ------------------------------------------------------------------ */
@@ -145,22 +223,22 @@ export function deriveStats(p: Progress) {
 
 type Ctx = State & {
   dispatch: (a: Action) => void;
-  stats: ReturnType<typeof deriveStats>;
+  overall: ReturnType<typeof overallStats>;
+  /** the dashboard's current journey */
+  activeJourney: Journey;
 };
 
 const GameContext = createContext<Ctx | null>(null);
 
 export function GameProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, undefined, () => ({
-    session: load<Session>(SESSION_KEY, { user: null, plan: null }),
-    progress: load<Progress>(PROGRESS_KEY, freshProgress()),
-  }));
+  const [state, dispatch] = useReducer(reducer, undefined, () => ({ session: loadSession(), progress: loadProgress() }));
 
   useEffect(() => save(SESSION_KEY, state.session), [state.session]);
   useEffect(() => save(PROGRESS_KEY, state.progress), [state.progress]);
 
-  const stats = useMemo(() => deriveStats(state.progress), [state.progress]);
-  const value = useMemo(() => ({ ...state, dispatch, stats }), [state, stats]);
+  const overall = useMemo(() => overallStats(state.progress), [state.progress]);
+  const activeJourney = JOURNEYS[state.progress.active] ?? JOURNEYS.telugu;
+  const value = useMemo(() => ({ ...state, dispatch, overall, activeJourney }), [state, overall, activeJourney]);
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
 }

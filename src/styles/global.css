@@ -109,6 +109,17 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 .telugu { font-family: var(--font-telugu); font-weight: 400; }
 
+/* Text in a journey's own script. dir and lang are set on the element. */
+.script { font-weight: 400; unicode-bidi: isolate; }
+.script-te { font-family: var(--font-telugu); }
+.script-hi { font-family: var(--font-devanagari); }
+.script-zh { font-family: var(--font-sc); letter-spacing: 0.02em; }
+.script-ar { font-family: var(--font-arabic); line-height: 1.5; }
+/* An RTL block would otherwise right-align itself inside this left-aligned layout.
+   Characters still run right-to-left; only the block's edge changes. */
+.script[dir="rtl"] { text-align: left; }
+.script-es { font-family: var(--font-display); font-style: italic; }
+
 /* ----- Section header block ----- */
 .section-head {
   display: grid;

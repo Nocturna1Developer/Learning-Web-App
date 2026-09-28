@@ -4,6 +4,11 @@ import { Button } from "../components/Button";
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 type Props = {
+  kicker: string;
+  title: string;
+  em: string;
+  text: string;
+  next: string;
   words: number;
   family: number;
   culture: number;
@@ -12,17 +17,16 @@ type Props = {
   onHome: () => void;
 };
 
-export function ChapterComplete({ words, family, culture, memories, onJournal, onHome }: Props) {
+export function ChapterComplete({ kicker, title, em, text, next, words, family, culture, memories, onJournal, onHome }: Props) {
   return (
     <div className="complete" role="dialog" aria-labelledby="cc-title">
       <div className="complete__inner">
-        <motion.p className="cinematic__k" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>Chapter complete</motion.p>
+        <motion.p className="cinematic__k" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>{kicker}</motion.p>
         <motion.h2 className="cinematic__title" id="cc-title" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35, duration: 0.9, ease: EASE }}>
-          A Family <em>Story</em>
+          {title} <em>{em}</em>
         </motion.h2>
         <motion.p className="cinematic__text" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7, duration: 0.8 }}>
-          You found the album, helped in the kitchen, and answered Amma in Telugu without thinking about it.
-          That last part is the whole game.
+          {text}
         </motion.p>
 
         <div className="complete__rewards" aria-label="Rewards">
@@ -48,8 +52,8 @@ export function ChapterComplete({ words, family, culture, memories, onJournal, o
           <Button onClick={onJournal}>Open the journal</Button>
           <Button variant="ghost" onClick={onHome} arrow={false}>Back to ROOTS Home</Button>
         </motion.div>
-        <motion.p className="cinematic__text" style={{ fontSize: "var(--text-xs)", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(244,236,221,0.4)" }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.2 }}>
-          Chapter Two — The Village — is being built.
+        <motion.p className="cinematic__text complete__next" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.2 }}>
+          {next}
         </motion.p>
       </div>
     </div>

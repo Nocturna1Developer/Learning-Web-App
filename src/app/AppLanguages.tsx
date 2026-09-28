@@ -11,11 +11,11 @@ export function AppLanguages() {
         <p className="page__kicker">Languages</p>
         <h1 className="page__title">One platform. Many <em>languages</em>.</h1>
         <p className="page__lede">
-          Your journey is Telugu. The other worlds are being built — each with its own places, people and
-          stories, not a translation of this one. They&rsquo;ll appear here as they open.
+          Each world has its own home, its own family and its own story — not a translation of the others. Chapter One is
+          playable in all five; the chapters after it are being built.
         </p>
       </motion.div>
-      <LanguageGrid playTo="/app/play" variant="full" />
+      <LanguageGrid hrefFor={(id) => `/app/play/${id}`} cta="Play" variant="full" />
     </div>
   );
 }
