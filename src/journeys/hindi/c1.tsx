@@ -2,24 +2,14 @@ import type { ChapterContent } from "../types";
 import { Defs, Walls, Door, Window, PhotoFrame, FLOOR_Y, WOOD } from "../../game/rooms";
 import { Figure, Garland, Pot } from "../../components/scenes/primitives";
 import { Icon, Panel } from "../kit";
+import { Diya } from "./art";
 
 /* =====================================================================
    HINDI · Devanagari · A Hindi-speaking family from Lucknow
    Chapter One — दादी आईं, Dadi's Here. The first day of summer.
    ===================================================================== */
 
-
 /* ---------------- art ---------------- */
-
-function Diya({ x, y, s = 1 }: { x: number; y: number; s?: number }) {
-  return (
-    <g transform={`translate(${x} ${y}) scale(${s})`}>
-      <circle cy="-26" r="40" fill="url(#lamp-glow)" />
-      <path d="M-22 0 q22 14 44 0 q-4 -10 -22 -10 t-22 10Z" fill="#b8862f" />
-      <path d="M14 -8 q7 -14 0 -26 q-7 12 0 26Z" fill="#f0a830" />
-    </g>
-  );
-}
 
 function Suitcase({ x }: { x: number }) {
   return (
