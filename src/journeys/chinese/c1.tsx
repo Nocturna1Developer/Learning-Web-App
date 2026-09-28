@@ -2,56 +2,14 @@ import type { ChapterContent } from "../types";
 import { Defs, Walls, Door, PhotoFrame, FLOOR_Y, WOOD } from "../../game/rooms";
 import { Figure, House } from "../../components/scenes/primitives";
 import { Portrait, Icon, Panel } from "../kit";
+import { SC, RED, GOLD, Lantern, FuDiamond, Couplet } from "./art";
 
 /* =====================================================================
    CHINESE · Mandarin, simplified characters · A Chinese-American family
    Chapter One — 团圆饭, Reunion Dinner. Lunar New Year's Eve.
    ===================================================================== */
 
-const SC = "'Noto Serif SC', 'Songti SC', 'SimSun', serif";
-const RED = "#c0392b";
-const GOLD = "#e8c25a";
-
-
 /* ---------------- art ---------------- */
-
-function Lantern({ x, y, s = 1, glow = true }: { x: number; y: number; s?: number; glow?: boolean }) {
-  return (
-    <g transform={`translate(${x} ${y}) scale(${s})`}>
-      <line x1="0" y1={-y / s} x2="0" y2="-66" stroke="#3a2718" strokeWidth="2" />
-      {glow && <circle r="90" fill="url(#lamp-glow)" opacity="0.6" />}
-      <rect x="-26" y="-68" width="52" height="12" rx="3" fill={GOLD} />
-      <ellipse rx="52" ry="58" fill={RED} />
-      {[-30, -12, 12, 30].map((dx) => <path key={dx} d={`M${dx} -56 Q${dx * 1.5} 0 ${dx} 56`} fill="none" stroke="#8e2418" strokeWidth="2" />)}
-      <rect x="-26" y="54" width="52" height="12" rx="3" fill={GOLD} />
-      <path d="M0 66v40M-6 72v30M6 72v30" stroke={GOLD} strokeWidth="3" />
-    </g>
-  );
-}
-
-function FuDiamond({ x, y, size = 90 }: { x: number; y: number; size?: number }) {
-  return (
-    <g transform={`translate(${x} ${y})`}>
-      <rect x={-size / 2} y={-size / 2} width={size} height={size} fill={RED} stroke={GOLD} strokeWidth="4" transform="rotate(45)" />
-      {/* upside down, on purpose */}
-      <text transform="rotate(180)" textAnchor="middle" dominantBaseline="central" fontFamily={SC} fontSize={size * 0.62} fill={GOLD} fontWeight="700">福</text>
-    </g>
-  );
-}
-
-function Couplet({ x, y, chars, vertical = true }: { x: number; y: number; chars: string; vertical?: boolean }) {
-  const n = [...chars].length;
-  const w = vertical ? 34 : n * 36 + 10;
-  const h = vertical ? n * 38 + 10 : 40;
-  return (
-    <g>
-      <rect x={x} y={y} width={w} height={h} fill={RED} />
-      {[...chars].map((c, i) => (
-        <text key={i} x={vertical ? x + w / 2 : x + 23 + i * 36} y={vertical ? y + 26 + i * 38 : y + 28} textAnchor="middle" fontFamily={SC} fontSize="24" fill="#1a0d08">{c}</text>
-      ))}
-    </g>
-  );
-}
 
 function HallArt({ done }: { done: ReadonlySet<string> }) {
   return (
