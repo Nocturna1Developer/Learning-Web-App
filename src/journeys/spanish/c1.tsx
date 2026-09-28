@@ -2,6 +2,7 @@ import type { ChapterContent } from "../types";
 import { Defs, Walls, Door, Window, PhotoFrame, FLOOR_Y, WOOD, FRAME } from "../../game/rooms";
 import { Figure, Child, House, Pot } from "../../components/scenes/primitives";
 import { Icon, Panel } from "../kit";
+import { PapelPicado, Marigolds, Candle, PanDeMuerto } from "./art";
 
 /* =====================================================================
    SPANISH · A Mexican-American family
@@ -9,71 +10,7 @@ import { Icon, Panel } from "../kit";
    Halloween; in this house Abuela is getting ready for Día de Muertos.
    ===================================================================== */
 
-
 /* ---------------- art ---------------- */
-
-const PICADO = ["#d6457a", "#e07a2f", "#7a3a8a", "#3f7d55", "#2d6ab8", "#f0cf3a"];
-
-function PapelPicado({ x1, x2, y, sag = 18, n = 9 }: { x1: number; x2: number; y: number; sag?: number; n?: number }) {
-  const w = (x2 - x1) / n;
-  return (
-    <g>
-      <path d={`M${x1} ${y} Q${(x1 + x2) / 2} ${y + sag * 2} ${x2} ${y}`} fill="none" stroke="#6b4a1e" strokeWidth="2" />
-      {Array.from({ length: n }, (_, i) => {
-        const t = (i + 0.5) / n;
-        const cx = x1 + w * (i + 0.5);
-        const cy = y + Math.sin(t * Math.PI) * sag;
-        const fw = w * 0.86;
-        return (
-          <g key={i} transform={`translate(${cx - fw / 2} ${cy})`}>
-            <path d={`M0 0h${fw}v${fw * 0.9}l-${fw / 8} -${fw / 10}l-${fw / 8} ${fw / 10}l-${fw / 8} -${fw / 10}l-${fw / 8} ${fw / 10}l-${fw / 8} -${fw / 10}l-${fw / 8} ${fw / 10}l-${fw / 8} -${fw / 10}l-${fw / 8} ${fw / 10}Z`} fill={PICADO[i % PICADO.length]} />
-            <circle cx={fw / 2} cy={fw * 0.35} r={fw * 0.14} fill="#fff" opacity="0.35" />
-            <path d={`M${fw * 0.2} ${fw * 0.62}h${fw * 0.6}`} stroke="#fff" strokeWidth="2" strokeDasharray="3 4" opacity="0.4" />
-          </g>
-        );
-      })}
-    </g>
-  );
-}
-
-function Marigolds({ x, y, n = 5, r = 11 }: { x: number; y: number; n?: number; r?: number }) {
-  return (
-    <g>
-      {Array.from({ length: n }, (_, i) => {
-        const cx = x + (i - (n - 1) / 2) * r * 1.5 + (i % 2) * 3;
-        const cy = y - (i % 2) * r * 0.9;
-        return (
-          <g key={i}>
-            <circle cx={cx} cy={cy} r={r} fill="#f08a1c" />
-            <circle cx={cx - r * 0.25} cy={cy - r * 0.25} r={r * 0.55} fill="#f7b23b" />
-            <circle cx={cx} cy={cy} r={r * 0.22} fill="#b8561a" />
-          </g>
-        );
-      })}
-    </g>
-  );
-}
-
-function Candle({ x, y, h = 40, lit = true }: { x: number; y: number; h?: number; lit?: boolean }) {
-  return (
-    <g>
-      {lit && <circle cx={x} cy={y - h - 10} r="22" fill="url(#lamp-glow)" />}
-      <rect x={x - 7} y={y - h} width="14" height={h} rx="2" fill="#f4ecdd" />
-      {lit && <path d={`M${x} ${y - h - 2} q7 -10 0 -20 q-7 10 0 20Z`} fill="#f0a830" />}
-    </g>
-  );
-}
-
-function PanDeMuerto({ x, y, s = 1 }: { x: number; y: number; s?: number }) {
-  return (
-    <g transform={`translate(${x} ${y}) scale(${s})`}>
-      <path d="M-34 0q0-30 34-30t34 30Z" fill="#c98b4a" />
-      <path d="M-26 -10q13 -18 26 -4q13 -18 26 4M-4 -24q4 -10 8 0" fill="none" stroke="#a86d34" strokeWidth="5" strokeLinecap="round" />
-      <circle cx="0" cy="-28" r="5" fill="#a86d34" />
-      <path d="M-30 -4q30 -22 60 0" fill="none" stroke="#f0cf7a" strokeWidth="2" strokeDasharray="1 5" opacity="0.8" />
-    </g>
-  );
-}
 
 function Ofrenda({ x, filled }: { x: number; filled: boolean }) {
   const y = FLOOR_Y;

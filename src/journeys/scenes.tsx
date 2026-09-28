@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Figure, Child } from "../components/scenes/primitives";
+import { Defs } from "../game/rooms";
 
 /**
  * Scene kit — parametric environments every chapter composes its rooms from:
@@ -29,6 +30,8 @@ export function Stage({ children, tone }: { children: ReactNode; tone?: string }
           <stop offset="100%" stopColor="#ffd07a" stopOpacity="0" />
         </radialGradient>
       </defs>
+      {/* the indoor gradients too, so Walls, Window and lamps work on any stage */}
+      <Defs />
       {children}
     </svg>
   );
@@ -409,6 +412,18 @@ export function Coin({ symbol, color = "#d9a441", ink = "#6b4a1e" }: { symbol: s
       <circle cx="32" cy="32" r="30" fill={color} />
       <circle cx="32" cy="32" r="24" fill="none" stroke={ink} strokeWidth="2" opacity="0.5" />
       <text x="32" y="41" textAnchor="middle" fontFamily="Fraunces, Georgia, serif" fontSize={symbol.length > 2 ? 16 : 24} fontWeight="600" fill={ink}>{symbol}</text>
+    </svg>
+  );
+}
+
+/** A wrapped sweet, for count games that share things out instead of paying. */
+export function Candy({ color = "#e0508a", wrap = "#f4ecdd" }: { color?: string; wrap?: string }) {
+  return (
+    <svg viewBox="0 0 64 64" aria-hidden="true">
+      <path d="M6 20l14 12l-14 12Z" fill={wrap} />
+      <path d="M58 20l-14 12l14 12Z" fill={wrap} />
+      <circle cx="32" cy="32" r="16" fill={color} />
+      <path d="M22 26q10 -8 20 0" stroke="#fff" strokeWidth="3" fill="none" opacity="0.5" />
     </svg>
   );
 }
